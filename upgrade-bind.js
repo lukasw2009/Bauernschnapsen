@@ -1,0 +1,22 @@
+function renderAll(){ensureBoard();renderProfiles();renderGame();renderHistory();renderPlayers();renderStats()}
+document.getElementById("quickProfile").onchange=e=>{if(data.started){e.target.value=data.activeProfileId;return}if(e.target.value===data.activeProfileId)return;data.activeProfileId=e.target.value;editingProfileId=e.target.value;resetSelectionForProfile();normalPoints=profile().normalPoints[0]??1;modifier="normal";save();renderAll();loadRuleEditor()};
+document.getElementById("profileSelect").onchange=e=>{editingProfileId=e.target.value;loadRuleEditor()};
+document.getElementById("goRules").onclick=()=>document.querySelector('.tab[data-page="rules"]').click();
+document.getElementById("gameType").onchange=()=>{modifier="normal";renderRoundControls()};
+document.getElementById("startGame").onclick=startGame;document.getElementById("editGameSetup").onclick=editGameSetup;
+document.getElementById("win1").onclick=()=>addRound(1);document.getElementById("win2").onclick=()=>addRound(2);document.getElementById("newSeries").onclick=newSeries;document.getElementById("undoRound").onclick=undoRound;
+document.getElementById("addPlayer").onclick=()=>{const i=document.getElementById("newPlayer"),n=i.value.trim();if(!n)return;if(data.players.some(p=>p.name.toLowerCase()===n.toLowerCase())){alert("Name existiert bereits.");return}data.players.push({id:uid(),name:n,archived:false});i.value="";save();renderAll()};
+document.getElementById("newPlayer").onkeydown=e=>{if(e.key==="Enter")document.getElementById("addPlayer").click()};
+document.getElementById("resetAll").onclick=()=>{if(confirm("Wirklich alle Spieler, Verläufe und eigenen Regelprofile löschen?")){localStorage.removeItem(KEY);data=fresh();editingProfileId=data.activeProfileId;ensureBoard();save();renderAll();loadRuleEditor()}};
+document.getElementById("exportBackup").onclick=exportBackup;document.getElementById("importBackup").onclick=()=>document.getElementById("backupFile").click();document.getElementById("backupFile").onchange=e=>{const f=e.target.files?.[0];if(f)importBackupFile(f);e.target.value=""};document.getElementById("exportCsv").onclick=exportCsv;
+document.getElementById("saveProfile").onclick=saveProfile;document.getElementById("newProfile").onclick=newProfile;document.getElementById("duplicateProfile").onclick=duplicateProfile;document.getElementById("deleteProfile").onclick=deleteProfile;
+document.getElementById("rScoreMode").onchange=e=>document.getElementById("rLimitLabel").textContent=e.target.value==="down"?"Startpunkte":"Punkteziel";
+document.getElementById("addAnnouncement").onclick=()=>{const p=editing();readEditorInto(p);p.announcements.push({name:"Neue Ansage",points:1,fixed:false});renderAnnouncementEditor(p.announcements)};
+document.getElementById("announcementEditor").onclick=e=>{const b=e.target.closest(".ann-del");if(!b)return;const p=editing();readEditorInto(p);p.announcements.splice(Number(b.dataset.i),1);renderAnnouncementEditor(p.announcements)};
+["historyProfile","historyPlayer","historyType","historySort","historyView"].forEach(id=>document.getElementById(id).onchange=e=>{data.ui[id]=e.target.value;save();renderHistory()});
+document.getElementById("historyCurrent").onchange=e=>{data.ui.historyCurrent=e.target.checked;save();renderHistory()};
+document.getElementById("clearHistoryFilters").onclick=()=>{Object.assign(data.ui,{historyProfile:"all",historyPlayer:"all",historyType:"all",historySort:"new",historyCurrent:false,historyView:"games"});save();renderHistory()};
+["statsProfile","statsPeriod","statsSort","statsScope"].forEach(id=>document.getElementById(id).onchange=e=>{data.ui[id]=e.target.value;save();renderStats()});
+document.querySelectorAll(".tab").forEach(t=>t.onclick=()=>{document.querySelectorAll(".tab").forEach(x=>x.classList.toggle("active",x===t));["game","history","stats","players","rules"].forEach(p=>document.getElementById("page-"+p).classList.toggle("hidden",p!==t.dataset.page));if(t.dataset.page==="rules"){editingProfileId=data.activeProfileId;renderProfiles();loadRuleEditor()}renderAll();window.scrollTo({top:0,behavior:"smooth"})});
+document.addEventListener("dblclick",e=>e.preventDefault(),{passive:false});document.addEventListener("gesturestart",e=>e.preventDefault(),{passive:false});
+renderAll();loadRuleEditor();
