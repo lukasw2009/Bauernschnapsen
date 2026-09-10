@@ -9,6 +9,10 @@
 <meta name="apple-mobile-web-app-title" content="Schnapsen">
 <title>Schnapsen Tracker</title>
 <link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="v6.css">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon.svg">
 
 </head>
 <body>
@@ -69,7 +73,8 @@
     <div class="card">
       <h2>Runde eintragen</h2>
       <label class="label">Ansage / Spiel</label>
-      <select id="gameType"></select>
+      <div id="announcementButtons" class="announceGrid"></div>
+      <select id="gameType" class="hidden" aria-hidden="true"></select>
       <div id="normalPointsWrap" class="field">
         <span class="label">Normales Spiel zählt</span>
         <div id="normalPointsButtons" class="grid3"></div>
@@ -96,6 +101,7 @@
       <div class="field"><span class="label">Spieler</span><select id="historyPlayer"></select></div>
       <div class="field"><span class="label">Ansage</span><select id="historyType"></select></div>
       <div class="field"><span class="label">Sortierung</span><select id="historySort"><option value="new">Neueste zuerst</option><option value="old">Älteste zuerst</option></select></div>
+      <div class="field"><span class="label">Ansicht</span><select id="historyView"><option value="games">Nach Partien gruppiert</option><option value="rounds">Einzelne Runden</option></select></div>
     </div>
     <label class="check" style="margin-top:9px"><input id="historyCurrent" type="checkbox"> Nur aktuelles Spiel</label>
     <button class="btn secondary" id="clearHistoryFilters" style="margin-top:9px">Filter zurücksetzen</button>
@@ -127,8 +133,17 @@
 
 <section id="page-players" class="hidden">
   <div class="card"><h2>Spieler hinzufügen</h2><div class="row"><input id="newPlayer" maxlength="20" placeholder="Name"><button class="btn" id="addPlayer" style="flex:.65">Hinzufügen</button></div></div>
-  <div class="card"><h2>Spielerliste</h2><div id="playerList"></div></div>
-  <div class="card"><h2>Daten</h2><button class="btn danger" id="resetAll">Alle gespeicherten Daten löschen</button></div>
+  <div class="card"><h2>Spielerliste</h2><div class="sectionHint">Verwendete Spieler werden archiviert statt gelöscht, damit alte Statistiken erhalten bleiben.</div><div id="playerList"></div></div>
+  <div class="card"><h2>Daten & Backup</h2>
+    <div class="backupGrid">
+      <button class="btn secondary" id="exportBackup">⬇️ Backup exportieren</button>
+      <button class="btn secondary" id="importBackup">⬆️ Backup importieren</button>
+      <button class="btn secondary" id="exportCsv">CSV exportieren</button>
+    </div>
+    <input id="backupFile" class="hidden" type="file" accept="application/json,.json">
+    <div class="note" style="margin-top:10px">Backup enthält Spieler, Regelprofile, Verlauf und Statistiken. Es wird nur lokal als Datei exportiert.</div>
+    <button class="btn danger" id="resetAll" style="margin-top:10px">Alle gespeicherten Daten löschen</button>
+  </div>
 </section>
 
 <section id="page-rules" class="hidden">
@@ -198,6 +213,14 @@
 
 <script src="app-core.js"></script>
 <script src="app-ui.js"></script>
+<script src="upgrade-ui.js"></script>
+<script src="upgrade-game-history.js"></script>
+<script src="upgrade-players-stats.js"></script>
+<script src="upgrade-rules-backup.js"></script>
+<script src="rules-v6.js"></script>
+<script src="upgrade-bind.js"></script>
+<script>window.initRulesV6?.();</script>
+<script src="pwa.js"></script>
 
 </body>
 </html>
