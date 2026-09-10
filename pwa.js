@@ -1,12 +1,4 @@
 (function(){
-  // Kleine Feature-Module können hier nachgeladen werden, ohne die Hauptseite jedes Mal umzubauen.
-  if(!document.querySelector('script[data-dealer-v7]')){
-    const s=document.createElement('script');
-    s.src='./dealer-v7.js';s.dataset.dealerV7='1';
-    s.onerror=()=>console.warn('Geber-Modul konnte nicht geladen werden');
-    document.body.appendChild(s);
-  }
-
   function makeToast(){
     if(document.getElementById('updateToast'))return document.getElementById('updateToast');
     const t=document.createElement('div');t.id='updateToast';t.className='updateToast hidden';
