@@ -1,0 +1,405 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#111827">
+<title>Bauernschnapsen Tracker</title>
+<style>
+:root{
+  --bg:#0b1020; --card:#151c2f; --card2:#1b243a; --text:#f3f4f6;
+  --muted:#9ca3af; --line:#2a3552; --accent:#60a5fa; --good:#34d399;
+  --danger:#fb7185; --warn:#fbbf24;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--text)}
+.app{max-width:760px;margin:0 auto;padding:18px 14px 90px}
+h1{font-size:24px;margin:0 0 6px}
+.sub{color:var(--muted);font-size:14px;margin-bottom:18px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px;margin:12px 0}
+.card h2{font-size:17px;margin:0 0 12px}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.player-btn,.choice,.btn,.tab{border:0;border-radius:14px;font-weight:700}
+.player-btn{padding:14px 10px;background:var(--card2);color:var(--text);border:1px solid var(--line)}
+.player-btn.active{outline:2px solid var(--accent);background:#162b4e}
+.player-btn.team1{outline:2px solid var(--good);background:#12352f}
+.player-btn:disabled{opacity:.45}
+.teamBox{padding:13px;border-radius:14px;background:var(--card2);border:1px solid var(--line);margin-top:10px}
+.teamTitle{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.teamNames{font-size:18px;font-weight:800;margin-top:3px}
+select,input{width:100%;background:#0f172a;color:var(--text);border:1px solid var(--line);border-radius:12px;padding:12px;font-size:16px}
+.row{display:flex;gap:10px}
+.row>*{flex:1}
+.btn{width:100%;padding:13px;background:var(--accent);color:#06101f;font-size:15px}
+.btn.good{background:var(--good);color:#05241c}
+.btn.danger{background:var(--danger);color:#2a0710}
+.btn.secondary{background:var(--card2);color:var(--text);border:1px solid var(--line)}
+.btn:disabled{opacity:.4}
+.spacer{height:8px}
+.nav{position:fixed;left:0;right:0;bottom:0;background:rgba(11,16,32,.96);backdrop-filter:blur(12px);border-top:1px solid var(--line);padding:9px max(9px,env(safe-area-inset-right)) calc(9px + env(safe-area-inset-bottom)) max(9px,env(safe-area-inset-left))}
+.navin{max-width:760px;margin:auto;display:grid;grid-template-columns:repeat(4,1fr);gap:7px}
+.tab{padding:10px 6px;background:transparent;color:var(--muted);font-size:12px}
+.tab.active{background:var(--card2);color:var(--text)}
+.hidden{display:none}
+.history{display:flex;flex-direction:column;gap:9px}
+.match{background:var(--card2);border:1px solid var(--line);border-radius:14px;padding:12px}
+.matchTop{display:flex;justify-content:space-between;gap:10px;font-weight:800}
+.win{color:var(--good)}
+.meta{color:var(--muted);font-size:12px;margin-top:6px}
+.stat{display:grid;grid-template-columns:1fr auto;gap:6px 10px;padding:10px 0;border-bottom:1px solid var(--line)}
+.stat:last-child{border-bottom:0}
+.big{font-size:28px;font-weight:900}
+.badge{display:inline-block;padding:4px 8px;border-radius:999px;background:#0f172a;border:1px solid var(--line);font-size:12px;color:var(--muted)}
+.playerRow{display:flex;gap:8px;align-items:center;margin:8px 0}
+.playerRow span{flex:1;font-weight:700}
+.small{font-size:13px;color:var(--muted)}
+.empty{text-align:center;color:var(--muted);padding:18px 4px}
+hr{border:0;border-top:1px solid var(--line);margin:14px 0}
+</style>
+</head>
+<body>
+<div class="app">
+  <h1>🃏 Bauernschnapsen</h1>
+  <div class="sub">Teams, Spiele und Statistiken automatisch speichern</div>
+
+  <section id="page-game">
+    <div class="card">
+      <h2>1. Vier Spieler auswählen</h2>
+      <div id="activePlayers" class="grid"></div>
+      <div id="activeHint" class="small" style="margin-top:10px"></div>
+    </div>
+
+    <div class="card">
+      <h2>2. Zwei Spieler für Team 1 antippen</h2>
+      <div id="teamPicker" class="grid"></div>
+
+      <div class="teamBox">
+        <div class="teamTitle">Team 1</div>
+        <div id="team1Names" class="teamNames">—</div>
+      </div>
+      <div class="teamBox">
+        <div class="teamTitle">Team 2</div>
+        <div id="team2Names" class="teamNames">—</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>3. Spiel eintragen</h2>
+      <label class="small">Spielart</label>
+      <select id="gameType">
+        <option>Normal</option>
+        <option>Schnapser</option>
+        <option>Bauernschnapser</option>
+        <option>Kontraschnapser</option>
+        <option>Bettler</option>
+        <option>Gang</option>
+        <option>Jodler</option>
+      </select>
+      <div class="spacer"></div>
+      <div class="row">
+        <button class="btn good" id="win1">Team 1 gewonnen</button>
+        <button class="btn good" id="win2">Team 2 gewonnen</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="page-history" class="hidden">
+    <div class="card">
+      <h2>Verlauf</h2>
+      <div id="history" class="history"></div>
+    </div>
+  </section>
+
+  <section id="page-stats" class="hidden">
+    <div class="card">
+      <h2>Gesamt</h2>
+      <div class="stat"><span>Spiele</span><strong id="totalGames">0</strong></div>
+      <div class="stat"><span>Häufigste Spielart</span><strong id="topGame">—</strong></div>
+    </div>
+    <div class="card">
+      <h2>Spieler</h2>
+      <div id="playerStats"></div>
+    </div>
+    <div class="card">
+      <h2>Teams</h2>
+      <div id="teamStats"></div>
+    </div>
+    <div class="card">
+      <h2>Spielarten</h2>
+      <div id="typeStats"></div>
+    </div>
+  </section>
+
+  <section id="page-players" class="hidden">
+    <div class="card">
+      <h2>Spieler hinzufügen</h2>
+      <div class="row">
+        <input id="newPlayer" maxlength="20" placeholder="Name">
+        <button class="btn" id="addPlayer" style="flex:.6">Hinzufügen</button>
+      </div>
+    </div>
+    <div class="card">
+      <h2>Spielerliste</h2>
+      <div id="playerList"></div>
+    </div>
+    <div class="card">
+      <h2>Daten</h2>
+      <button class="btn danger" id="resetAll">Alle Spiele löschen</button>
+    </div>
+  </section>
+</div>
+
+<div class="nav">
+  <div class="navin">
+    <button class="tab active" data-page="game">🎴<br>Spiel</button>
+    <button class="tab" data-page="history">🕘<br>Verlauf</button>
+    <button class="tab" data-page="stats">📊<br>Statistik</button>
+    <button class="tab" data-page="players">👥<br>Spieler</button>
+  </div>
+</div>
+
+<script>
+const KEY = "bauernschnapsen_tracker_v1";
+const defaultData = { players: [], matches: [], active: [], team1: [] };
+let data = load();
+
+function load(){
+  try{
+    const x = JSON.parse(localStorage.getItem(KEY));
+    return x && Array.isArray(x.players) ? x : structuredClone(defaultData);
+  }catch{
+    return structuredClone(defaultData);
+  }
+}
+function save(){
+  localStorage.setItem(KEY, JSON.stringify(data));
+}
+function esc(s){
+  return String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+}
+function id(){
+  return crypto.randomUUID ? crypto.randomUUID() : Date.now()+"_"+Math.random();
+}
+function getPlayer(pid){ return data.players.find(p=>p.id===pid); }
+function name(pid){ return getPlayer(pid)?.name ?? "Unbekannt"; }
+
+function renderGame(){
+  const activeWrap = document.getElementById("activePlayers");
+  activeWrap.innerHTML = "";
+  data.players.forEach(p=>{
+    const b=document.createElement("button");
+    b.className="player-btn"+(data.active.includes(p.id)?" active":"");
+    b.textContent=p.name;
+    b.onclick=()=>{
+      if(data.active.includes(p.id)){
+        data.active=data.active.filter(x=>x!==p.id);
+        data.team1=data.team1.filter(x=>x!==p.id);
+      }else if(data.active.length<4){
+        data.active.push(p.id);
+      }
+      save(); renderAll();
+    };
+    activeWrap.appendChild(b);
+  });
+
+  const hint=document.getElementById("activeHint");
+  if(data.players.length<4) hint.textContent="Lege zuerst mindestens 4 Spieler unter „Spieler“ an.";
+  else hint.textContent=`${data.active.length}/4 ausgewählt`;
+
+  const picker=document.getElementById("teamPicker");
+  picker.innerHTML="";
+  data.active.forEach(pid=>{
+    const b=document.createElement("button");
+    b.className="player-btn"+(data.team1.includes(pid)?" team1":"");
+    b.textContent=name(pid);
+    b.disabled = data.active.length!==4 || (!data.team1.includes(pid) && data.team1.length>=2);
+    b.onclick=()=>{
+      if(data.team1.includes(pid)) data.team1=data.team1.filter(x=>x!==pid);
+      else if(data.team1.length<2) data.team1.push(pid);
+      save(); renderAll();
+    };
+    picker.appendChild(b);
+  });
+
+  const team2 = data.active.filter(x=>!data.team1.includes(x));
+  document.getElementById("team1Names").textContent =
+    data.team1.length ? data.team1.map(name).join(" + ") : "—";
+  document.getElementById("team2Names").textContent =
+    (data.active.length===4 && data.team1.length===2) ? team2.map(name).join(" + ") : "—";
+
+  const ready = data.active.length===4 && data.team1.length===2 && team2.length===2;
+  document.getElementById("win1").disabled=!ready;
+  document.getElementById("win2").disabled=!ready;
+}
+
+function addMatch(winner){
+  const team2=data.active.filter(x=>!data.team1.includes(x));
+  if(data.active.length!==4 || data.team1.length!==2 || team2.length!==2) return;
+
+  const m={
+    id:id(),
+    at:new Date().toISOString(),
+    type:document.getElementById("gameType").value,
+    team1:[...data.team1],
+    team2:[...team2],
+    winner
+  };
+  data.matches.unshift(m);
+  save();
+  renderAll();
+}
+
+function renderHistory(){
+  const box=document.getElementById("history");
+  if(!data.matches.length){
+    box.innerHTML='<div class="empty">Noch keine Spiele eingetragen.</div>';
+    return;
+  }
+  box.innerHTML=data.matches.map(m=>{
+    const t1=m.team1.map(name).join(" + ");
+    const t2=m.team2.map(name).join(" + ");
+    const d=new Date(m.at);
+    const date=d.toLocaleString("de-AT",{day:"2-digit",month:"2-digit",year:"numeric",hour:"2-digit",minute:"2-digit"});
+    return `<div class="match">
+      <div class="matchTop">
+        <span class="${m.winner===1?'win':''}">${esc(t1)}</span>
+        <span>vs.</span>
+        <span class="${m.winner===2?'win':''}">${esc(t2)}</span>
+      </div>
+      <div class="meta">${esc(m.type)} · ${date}</div>
+    </div>`;
+  }).join("");
+}
+
+function renderPlayers(){
+  const list=document.getElementById("playerList");
+  if(!data.players.length){
+    list.innerHTML='<div class="empty">Noch keine Spieler vorhanden.</div>';
+    return;
+  }
+  list.innerHTML="";
+  data.players.forEach(p=>{
+    const row=document.createElement("div");
+    row.className="playerRow";
+    const span=document.createElement("span");
+    span.textContent=p.name;
+    const del=document.createElement("button");
+    del.className="btn secondary";
+    del.style.width="auto";
+    del.textContent="Löschen";
+    del.onclick=()=>{
+      const used=data.matches.some(m=>m.team1.includes(p.id)||m.team2.includes(p.id));
+      if(used){
+        alert("Dieser Spieler kommt bereits im Verlauf vor und kann deshalb nicht gelöscht werden.");
+        return;
+      }
+      data.players=data.players.filter(x=>x.id!==p.id);
+      data.active=data.active.filter(x=>x!==p.id);
+      data.team1=data.team1.filter(x=>x!==p.id);
+      save();renderAll();
+    };
+    row.append(span,del);
+    list.appendChild(row);
+  });
+}
+
+function teamKey(arr){ return [...arr].sort().join("|"); }
+
+function renderStats(){
+  document.getElementById("totalGames").textContent=data.matches.length;
+
+  const types={};
+  data.matches.forEach(m=>types[m.type]=(types[m.type]||0)+1);
+  const typeEntries=Object.entries(types).sort((a,b)=>b[1]-a[1]);
+  document.getElementById("topGame").textContent=typeEntries[0]?.[0] ?? "—";
+
+  const pbox=document.getElementById("playerStats");
+  if(!data.matches.length){
+    pbox.innerHTML='<div class="empty">Noch keine Statistik vorhanden.</div>';
+  }else{
+    pbox.innerHTML=data.players.map(p=>{
+      let games=0,wins=0;
+      data.matches.forEach(m=>{
+        const in1=m.team1.includes(p.id), in2=m.team2.includes(p.id);
+        if(in1||in2){
+          games++;
+          if((in1&&m.winner===1)||(in2&&m.winner===2)) wins++;
+        }
+      });
+      if(!games) return "";
+      const rate=Math.round(wins/games*100);
+      return `<div class="stat"><span><strong>${esc(p.name)}</strong><br><span class="small">${games} Spiele · ${wins} Siege</span></span><strong>${rate}%</strong></div>`;
+    }).join("");
+  }
+
+  const teams={};
+  data.matches.forEach(m=>{
+    [1,2].forEach(side=>{
+      const arr=side===1?m.team1:m.team2;
+      const k=teamKey(arr);
+      if(!teams[k]) teams[k]={players:arr,games:0,wins:0};
+      teams[k].games++;
+      if(m.winner===side) teams[k].wins++;
+    });
+  });
+  const tbox=document.getElementById("teamStats");
+  const teamEntries=Object.values(teams).sort((a,b)=>b.games-a.games || b.wins-a.wins);
+  tbox.innerHTML=teamEntries.length ? teamEntries.map(t=>{
+    const rate=Math.round(t.wins/t.games*100);
+    return `<div class="stat"><span><strong>${t.players.map(x=>esc(name(x))).join(" + ")}</strong><br><span class="small">${t.games} Spiele · ${t.wins} Siege</span></span><strong>${rate}%</strong></div>`;
+  }).join("") : '<div class="empty">Noch keine Team-Statistik vorhanden.</div>';
+
+  const ty=document.getElementById("typeStats");
+  ty.innerHTML=typeEntries.length ? typeEntries.map(([k,v])=>
+    `<div class="stat"><span>${esc(k)}</span><strong>${v}×</strong></div>`
+  ).join("") : '<div class="empty">Noch keine Spielarten erfasst.</div>';
+}
+
+function renderAll(){
+  renderGame();
+  renderHistory();
+  renderPlayers();
+  renderStats();
+}
+
+document.getElementById("addPlayer").onclick=()=>{
+  const inp=document.getElementById("newPlayer");
+  const n=inp.value.trim();
+  if(!n) return;
+  if(data.players.some(p=>p.name.toLowerCase()===n.toLowerCase())){
+    alert("Der Name existiert bereits.");
+    return;
+  }
+  data.players.push({id:id(),name:n});
+  inp.value="";
+  if(data.players.length<=4) data.active=data.players.map(p=>p.id);
+  save();renderAll();
+};
+document.getElementById("newPlayer").addEventListener("keydown",e=>{
+  if(e.key==="Enter") document.getElementById("addPlayer").click();
+});
+document.getElementById("win1").onclick=()=>addMatch(1);
+document.getElementById("win2").onclick=()=>addMatch(2);
+
+document.getElementById("resetAll").onclick=()=>{
+  if(confirm("Wirklich alle gespeicherten Spiele löschen?")){
+    data.matches=[];
+    save();renderAll();
+  }
+};
+
+document.querySelectorAll(".tab").forEach(tab=>{
+  tab.onclick=()=>{
+    const page=tab.dataset.page;
+    document.querySelectorAll(".tab").forEach(x=>x.classList.toggle("active",x===tab));
+    ["game","history","stats","players"].forEach(p=>{
+      document.getElementById("page-"+p).classList.toggle("hidden",p!==page);
+    });
+    renderAll();
+  };
+});
+
+renderAll();
+</script>
+</body>
+</html>
