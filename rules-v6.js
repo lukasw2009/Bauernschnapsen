@@ -132,7 +132,7 @@
       if(!Array.isArray(a.allowedModifierIds))a.allowedModifierIds=a.fixed?[]:p.modifiers.map(m=>m.id);
       const r=document.createElement('div');r.className='v6Announce';r.dataset.i=i;
       r.innerHTML=`<div class="v6AnnounceMain"><input class="miniInput ann-name" maxlength="35" value="${esc(a.name)}"><input class="miniInput ann-points" type="number" min="0" step=".5" value="${a.points}"><button class="btn danger ann-del" type="button">×</button></div><details class="v6Allowed"><summary>Erlaubte Wertungen <span class="small">(${a.allowedModifierIds.length?p.modifiers.filter(m=>a.allowedModifierIds.includes(m.id)).map(m=>m.name).join(', '):'nur Normal'})</span></summary><div class="v6ModifierChecks">${p.modifiers.map(m=>`<label class="check"><input class="ann-mod" type="checkbox" value="${m.id}" ${a.allowedModifierIds.includes(m.id)?'checked':''}> ${esc(m.name)}</label>`).join('')||'<span class="small">In diesem Profil gibt es keine zusätzlichen Wertungen.</span>'}</div></details>`;
-      r.querySelector('.ann-del').onclick=()=>{readEditorInto(p);p.announcements.splice(i,1);renderAnnouncementEditor(p.announcements)};
+      r.querySelector('.ann-del').onclick=e=>{e.stopPropagation();readEditorInto(p);p.announcements.splice(i,1);renderAnnouncementEditor(p.announcements)};
       box.appendChild(r);
     });
   };
@@ -180,6 +180,7 @@
   modifier='base';
   window.initRulesV6=function(){
     ensureEngineUi();
+    const annBox=document.getElementById('announcementEditor');if(annBox)annBox.onclick=null;
     const add=document.getElementById('addAnnouncement');
     if(add)add.onclick=()=>{const p=editing();readEditorInto(p);p.announcements.push({name:'Neue Ansage',points:1,allowedModifierIds:p.modifiers.map(m=>m.id),fixed:false});renderAnnouncementEditor(p.announcements)};
     loadRuleEditor();renderAll();
