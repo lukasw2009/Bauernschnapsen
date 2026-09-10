@@ -1,3 +1,4 @@
+function esc(s){return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
 function renderAll(){ensureBoard();renderProfiles();renderGame();renderHistory();renderPlayers();renderStats()}
 document.getElementById("quickProfile").onchange=e=>{if(data.started){e.target.value=data.activeProfileId;return}if(e.target.value===data.activeProfileId)return;data.activeProfileId=e.target.value;editingProfileId=e.target.value;resetSelectionForProfile();normalPoints=profile().normalPoints[0]??1;modifier="normal";save();renderAll();loadRuleEditor()};
 document.getElementById("profileSelect").onchange=e=>{editingProfileId=e.target.value;loadRuleEditor()};
