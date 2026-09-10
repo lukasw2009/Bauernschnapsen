@@ -7,13 +7,13 @@ const preset3=()=>({id:uid(),name:"3 Spieler · 1 gegen 2",players:3,teamSize:1,
 {name:"Schnapser",points:6,fixed:false},{name:"Bettler",points:5,fixed:false},{name:"Bauernschnapser",points:12,fixed:false},{name:"Land",points:9,fixed:false},{name:"Jodler",points:12,fixed:false}]});
 function fresh(){
  const profiles=[preset4(),preset2(),preset3()];
- return{players:[],active:[],team1:[],rounds:[],series:[],profiles,activeProfileId:profiles[0].id,board:null,sessionId:uid(),started:false,ui:{historyProfile:"all",historyPlayer:"all",historyType:"all",historySort:"new",historyCurrent:false,statsProfile:"all",statsPeriod:"all",statsSort:"games",statsScope:"all"}};
+ return{players:[],active:[],team1:[],rounds:[],series:[],profiles,activeProfileId:profiles[0].id,board:null,sessionId:uid(),started:false,ui:{historyProfile:"all",historyPlayer:"all",historyType:"all",historySort:"new",historyCurrent:false,historyView:"games",statsProfile:"all",statsPeriod:"all",statsSort:"games",statsScope:"all"}};
 }
 function load(){
  try{
   const x=JSON.parse(localStorage.getItem(KEY));
   if(x&&Array.isArray(x.players)&&Array.isArray(x.profiles)&&x.profiles.length){
-   if(!x.ui)x.ui={historyProfile:"all",historyPlayer:"all",historyType:"all",historySort:"new",historyCurrent:false,statsProfile:"all",statsPeriod:"all",statsSort:"games",statsScope:"all"};
+   if(!x.ui)x.ui={historyProfile:"all",historyPlayer:"all",historyType:"all",historySort:"new",historyCurrent:false,historyView:"games",statsProfile:"all",statsPeriod:"all",statsSort:"games",statsScope:"all"};
    if(typeof x.started!=="boolean")x.started=false;
    return x;
   }
@@ -29,7 +29,7 @@ function load(){
 }
 let data=load(),normalPoints=1,modifier="normal",editingProfileId=data.activeProfileId;
 function save(){localStorage.setItem(KEY,JSON.stringify(data))}
-function esc(s){return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
+function esc(s){return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot',"'":'&#39;'}[m]))}
 function player(id){return data.players.find(p=>p.id===id)} function pname(id){return player(id)?.name??"Unbekannt"}
 function profile(){return data.profiles.find(p=>p.id===data.activeProfileId)||data.profiles[0]}
 function editing(){return data.profiles.find(p=>p.id===editingProfileId)||data.profiles[0]}
@@ -74,7 +74,7 @@ function modifierLabel(){
 function renderProfiles(){
  const opts=data.profiles.map(p=>`<option value="${p.id}">${esc(p.name)}</option>`).join("");
  const q=document.getElementById("quickProfile"),s=document.getElementById("profileSelect");
- q.innerHTML=opts;q.value=data.activeProfileId;s.innerHTML=opts;s.value=editingProfileId;
+ q.innerHTML=opts;q.value=data.activeProfileId;q.disabled=!!data.started;s.innerHTML=opts;s.value=editingProfileId;
  const p=profile();document.getElementById("subtitle").textContent=`${p.name} · ${p.players} Spieler · ${p.scoreMode==="down"?p.limit+" runter":"bis "+p.limit}`;
 }
 function currentSessionRounds(){return data.rounds.filter(r=>r.sessionId===data.sessionId)}
@@ -86,15 +86,16 @@ function renderActivePointHistory(){
  if(!rounds.length){box.innerHTML=`<div class="pointStep"><span class="pointScore">${start}</span><span class="pointDesc">Start</span><span></span></div>`;return}
  const shown=rounds.slice(-8);
  box.innerHTML=(rounds.length>8?`<div class="small" style="margin-bottom:5px">${rounds.length-8} ältere Runden findest du im Verlauf.</div>`:"")+shown.map(r=>{
-  const before=scorePair(r.beforeBoard),after=scorePair(r.afterBoard),desc=`${r.type} · ${r.modifier||"Normal"} · ${r.points} P.`+(r.bommerlTo?" · Bommerl / Neustart":""),winner=r.winner===1?"S1":"S2";
-  return `<div class="pointStep"><span class="pointScore">${before} → ${after}</span><span class="pointDesc">${esc(desc)}</span><span class="pointWinner">${winner}</span></div>`;
+  const before=scorePair(r.beforeBoard),reached=scorePair(r.reachedBoard||r.afterBoard),after=scorePair(r.afterBoard),desc=`${r.type} · ${r.modifier||"Normal"} · ${r.points} P.`+(r.bommerlTo?" · Bommerl / Neustart":""),winner=r.winner===1?"S1":"S2";
+  const flow=r.bommerlTo&&!r.seriesWinner?`${before} → ${reached} → ${after}`:`${before} → ${reached}`;
+  return `<div class="pointStep"><span class="pointScore">${flow}</span><span class="pointDesc">${esc(desc)}</span><span class="pointWinner">${winner}</span></div>`;
  }).join("");
 }
 function renderGame(){
  const p=profile(),wrap=document.getElementById("activePlayers");wrap.innerHTML="";
  document.getElementById("gameSetup").classList.toggle("hidden",!!data.started);
  document.getElementById("activeGame").classList.toggle("hidden",!data.started);
- data.players.forEach(pl=>{
+ data.players.filter(pl=>!pl.archived).forEach(pl=>{
   const b=document.createElement("button");b.className="player-btn"+(data.active.includes(pl.id)?" active":"");b.textContent=pl.name;
   b.onclick=()=>{
    if(data.started)return;
@@ -139,6 +140,8 @@ function renderRoundControls(){
  const p=profile(),gt=document.getElementById("gameType"),old=gt.value;
  gt.innerHTML='<option value="__normal">Normal</option>'+p.announcements.map((a,i)=>`<option value="${i}">${esc(a.name)} · ${a.points}</option>`).join("");
  if([...gt.options].some(o=>o.value===old))gt.value=old;
+ const ab=document.getElementById("announcementButtons");
+ if(ab){ab.innerHTML="";[...gt.options].forEach(o=>{const b=document.createElement("button");b.className="announce-btn"+(gt.value===o.value?" active":"");b.textContent=o.textContent;b.onclick=()=>{gt.value=o.value;modifier="normal";renderRoundControls()};ab.appendChild(b)})}
  const np=document.getElementById("normalPointsButtons");np.innerHTML="";
  if(!p.normalPoints.includes(normalPoints))normalPoints=p.normalPoints[0]??1;
  p.normalPoints.forEach(n=>{const b=document.createElement("button");b.className="mod-btn"+(normalPoints===n?" active":"");b.textContent=n;b.onclick=()=>{normalPoints=n;renderRoundControls()};np.appendChild(b)});
@@ -156,3 +159,10 @@ function renderRoundControls(){
  document.getElementById("win1").disabled=!data.started||!ready()||data.board.over;document.getElementById("win2").disabled=!data.started||!ready()||data.board.over;
  document.getElementById("undoRound").disabled=!data.rounds.length||data.rounds[0].sessionId!==data.sessionId;
 }
+
+// v5 feature modules are loaded after the base UI so existing local data stays compatible.
+window.addEventListener("DOMContentLoaded",()=>{
+ const files=["upgrade-ui.js","upgrade-game-history.js","upgrade-players-stats.js","upgrade-rules-backup.js","upgrade-bind.js"];
+ const load=i=>{if(i>=files.length)return;const s=document.createElement("script");s.src=files[i]+"?v=5";s.onload=()=>load(i+1);s.onerror=()=>console.error("Upgrade-Modul konnte nicht geladen werden:",files[i]);document.body.appendChild(s)};
+ load(0);
+});
