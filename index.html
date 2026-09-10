@@ -1,229 +1,226 @@
 <!doctype html>
 <html lang="de">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-<meta name="theme-color" content="#0b1020">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Schnapsen">
-<title>Schnapsen Tracker</title>
-<link rel="stylesheet" href="style.css">
-<link rel="stylesheet" href="v6.css">
-<link rel="stylesheet" href="v8.css">
-<link rel="manifest" href="manifest.webmanifest">
-<link rel="icon" href="icon.svg" type="image/svg+xml">
-<link rel="apple-touch-icon" href="icon.svg">
-
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+  <meta name="theme-color" content="#0b1020">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Schnapsen">
+  <title>Schnapsen Tracker</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icon.svg">
 </head>
 <body>
 <div class="app">
-<h1>🃏 Schnapsen Tracker</h1>
-<div class="sub" id="subtitle">Regelprofile · Punkte · Bommerl · Statistiken</div>
+  <header class="appHeader">
+    <div><h1>🃏 Schnapsen Tracker</h1><div class="sub" id="subtitle">Punkte · Bommerl · Statistik</div></div>
+    <span id="offlineBadge" class="offlineBadge hidden">Offline</span>
+  </header>
 
-<section id="page-game">
-  <div id="gameSetup">
-    <div class="card">
-      <div class="rulebar">
-        <div><span class="label">Regelprofil</span><select id="quickProfile"></select></div>
-        <button class="btn secondary" id="goRules" style="flex:.6">Regeln</button>
-      </div>
-    </div>
+  <main>
+    <section id="page-game" class="page">
+      <div id="gameSetup">
+        <div class="card compactCard">
+          <div class="rulebar">
+            <div><span class="label">Regelprofil</span><select id="quickProfile"></select></div>
+            <button class="btn secondary smallBtn" id="goRules" type="button">Regeln</button>
+          </div>
+        </div>
 
-    <div class="card">
-      <h2>Spiel vorbereiten</h2>
-      <div class="sectionHint">Spieler auswählen, Seiten festlegen und danach einmal auf „Spiel starten“ drücken.</div>
-      <div id="activePlayers" class="grid"></div>
-      <div id="activeHint" class="small" style="margin-top:9px"></div>
-      <div id="teamPickWrap" class="field">
-        <span class="label" id="teamPickLabel">Spieler für Seite 1 antippen</span>
-        <div id="teamPicker" class="grid"></div>
-      </div>
-      <div class="teams">
-        <div class="teamBox"><div class="teamTitle">Seite 1</div><div id="team1Names" class="teamNames">—</div></div>
-        <div class="teamBox"><div class="teamTitle">Seite 2</div><div id="team2Names" class="teamNames">—</div></div>
-      </div>
-      <button id="startGame" class="btn good startBtn">▶ Spiel starten</button>
-    </div>
-  </div>
+        <div class="card">
+          <h2>Spiel vorbereiten</h2>
+          <div class="sectionHint">Spieler wählen, Seiten festlegen und starten.</div>
+          <div id="activePlayers" class="grid"></div>
+          <div id="activeHint" class="small hintLine"></div>
 
-  <div id="activeGame" class="hidden">
-    <div class="card" id="activeGameCard">
-      <div class="setupSummary">
-        <div><span class="activeBadge">AKTIVES SPIEL</span><br><strong id="activeProfileName"></strong></div>
-        <button id="editGameSetup" class="btn secondary" style="width:auto">Ändern</button>
-      </div>
-      <div class="scoreboard">
-        <div class="scoreTeam"><div id="scoreName1" class="scoreNames">Seite 1</div><div id="score1" class="scoreNum">24</div><div id="bomb1" class="bomb"></div></div>
-        <div class="versus">:</div>
-        <div class="scoreTeam"><div id="scoreName2" class="scoreNames">Seite 2</div><div id="score2" class="scoreNum">24</div><div id="bomb2" class="bomb"></div></div>
-      </div>
-      <div id="gameStatus" class="status">Spiel läuft</div>
+          <div class="field">
+            <span class="label" id="teamPickLabel">Spieler für Seite 1</span>
+            <div id="teamPicker" class="grid"></div>
+          </div>
+          <div class="teams">
+            <div class="teamBox"><div class="teamTitle">Seite 1</div><div id="team1Names" class="teamNames">—</div></div>
+            <div class="teamBox"><div class="teamTitle">Seite 2</div><div id="team2Names" class="teamNames">—</div></div>
+          </div>
 
-      <div class="pointHistory">
-        <div class="pointHistoryTitle"><span>📉 Punkteverlauf</span><span class="small" id="activeRoundCount">0 Runden</span></div>
-        <div id="activePointHistory"></div>
+          <details id="dealerSetup" class="foldCard">
+            <summary><span><strong>🂠 Geber & Sitzreihenfolge</strong><small id="dealerSetupSummary">Automatisch</small></span><b>▾</b></summary>
+            <div class="foldBody">
+              <div class="small">Die Reihenfolge geht nach jeder Runde um einen Spieler weiter.</div>
+              <div id="dealerOrder" class="dealerOrder"></div>
+              <div class="field"><span class="label">Erster Geber</span><select id="startDealer"></select></div>
+            </div>
+          </details>
+
+          <button id="startGame" class="btn good startBtn" type="button">▶ Spiel starten</button>
+        </div>
       </div>
 
-      <div class="row" style="margin-top:10px">
-        <button id="newSeries" class="btn secondary">Neue Partie</button>
-        <button id="undoRound" class="btn secondary">↶ Letzte Runde</button>
+      <div id="roundPage" class="hidden">
+        <div id="compactGameBar" class="compactGameBar">
+          <button id="compactToScore" class="compactScore" type="button"><span id="compactNames">Spielstand</span><strong id="compactScore">– : –</strong></button>
+          <div class="compactSide"><span id="compactDealer">🂠 –</span><button class="iconBtn gameMenuOpen" type="button" aria-label="Spielaktionen">•••</button></div>
+        </div>
+
+        <div class="card roundCard">
+          <div class="cardTitleRow"><div><h2>Runde eintragen</h2><div class="small" id="roundProfileLabel"></div></div></div>
+          <span class="label">Ansage / Spiel</span>
+          <div id="announcementButtons" class="hScroll"></div>
+          <select id="gameType" class="hidden" aria-hidden="true"></select>
+
+          <div id="normalPointsWrap" class="field">
+            <span class="label">Normales Spiel zählt</span>
+            <div id="normalPointsButtons" class="hScroll compactChoices"></div>
+          </div>
+
+          <div id="modifierWrap" class="field">
+            <span class="label">Wertung</span>
+            <div id="modifierButtons" class="hScroll compactChoices"></div>
+            <div id="fixedNote" class="small hidden hintLine">Nur Grundwertung erlaubt.</div>
+          </div>
+
+          <div class="valueBox"><span>Diese Runde zählt</span><strong id="roundValue">1</strong></div>
+          <div class="winnerGrid">
+            <button class="btn good" id="win1" type="button">Seite 1 gewinnt</button>
+            <button class="btn good" id="win2" type="button">Seite 2 gewinnt</button>
+          </div>
+        </div>
       </div>
-    </div>
+    </section>
 
-    <div class="card">
-      <h2>Runde eintragen</h2>
-      <label class="label">Ansage / Spiel</label>
-      <div id="announcementButtons" class="announceGrid"></div>
-      <select id="gameType" class="hidden" aria-hidden="true"></select>
-      <div id="normalPointsWrap" class="field">
-        <span class="label">Normales Spiel zählt</span>
-        <div id="normalPointsButtons" class="grid3"></div>
+    <section id="page-score" class="page hidden">
+      <div id="scoreEmpty" class="card emptyState"><div class="emptyIcon">🎴</div><h2>Kein aktives Spiel</h2><div class="small">Starte zuerst eine Partie.</div><button id="scoreToGame" class="btn good" type="button">Zum Spiel</button></div>
+      <div id="scoreActive" class="hidden">
+        <div class="card scoreCard">
+          <div class="setupSummary"><div><span class="activeBadge" id="activeStatusBadge">AKTIVES SPIEL</span><br><strong id="activeProfileName"></strong></div><button class="iconBtn gameMenuOpen" type="button" aria-label="Spielaktionen">•••</button></div>
+          <div class="scoreboard">
+            <div class="scoreTeam"><div id="scoreName1" class="scoreNames">Seite 1</div><div id="score1" class="scoreNum">24</div><div id="bomb1" class="bomb"></div></div>
+            <div class="versus">:</div>
+            <div class="scoreTeam"><div id="scoreName2" class="scoreNames">Seite 2</div><div id="score2" class="scoreNum">24</div><div id="bomb2" class="bomb"></div></div>
+          </div>
+          <div id="gameStatus" class="status">Spiel läuft</div>
+          <div class="dealerBanner"><div><span>🂠 Aktueller Geber</span><strong id="dealerName">—</strong></div><small id="nextDealer">Nächster: —</small></div>
+        </div>
+
+        <div class="card">
+          <div class="pointHistoryTitle"><span>📉 Punkteverlauf</span><span class="small" id="activeRoundCount">0 Runden</span></div>
+          <div id="activePointHistory"></div>
+        </div>
       </div>
-      <div id="modifierWrap" class="field">
-        <span class="label">Wertung</span>
-        <div id="modifierButtons" class="mods"></div>
-        <div id="fixedNote" class="small hidden" style="margin-top:7px">Diese Ansage hat im Regelprofil eine fixe Wertung.</div>
+    </section>
+
+    <section id="page-history" class="page hidden">
+      <div class="pageToolbar"><div><strong>Verlauf</strong><span id="historyFilterState">Alle Einträge</span></div><button id="historyFilterToggle" class="btn secondary toolbarBtn" type="button">Filter</button></div>
+      <div id="historyFilterCard" class="card hidden">
+        <div class="filterGrid">
+          <div class="field"><span class="label">Regelprofil</span><select id="historyProfile"></select></div>
+          <div class="field"><span class="label">Spieler</span><select id="historyPlayer"></select></div>
+          <div class="field"><span class="label">Ansage</span><select id="historyType"></select></div>
+          <div class="field"><span class="label">Sortierung</span><select id="historySort"><option value="new">Neueste zuerst</option><option value="old">Älteste zuerst</option></select></div>
+          <div class="field"><span class="label">Ansicht</span><select id="historyView"><option value="games">Nach Partien</option><option value="rounds">Einzelne Runden</option></select></div>
+        </div>
+        <label class="check topGap"><input id="historyCurrent" type="checkbox"> Nur aktuelles Spiel</label>
+        <button class="btn secondary topGap" id="clearHistoryFilters" type="button">Filter zurücksetzen</button>
       </div>
-      <div class="valueBox"><span>Diese Runde zählt</span><strong id="roundValue">1</strong></div>
-      <div class="row" style="margin-top:11px">
-        <button class="btn good" id="win1">Seite 1 gewinnt</button>
-        <button class="btn good" id="win2">Seite 2 gewinnt</button>
+      <div id="history" class="history"></div>
+    </section>
+
+    <section id="page-stats" class="page hidden">
+      <div class="statsHead">
+        <div id="statsTabs" class="subNav"><button data-stats="overview">Übersicht</button><button data-stats="players">Spieler</button><button data-stats="teams">Teams</button><button data-stats="types">Ansagen</button></div>
+        <button id="statsFilterToggle" class="btn secondary toolbarBtn" type="button">Filter</button>
       </div>
-    </div>
-  </div>
-</section>
+      <div id="statsFilterCard" class="card hidden">
+        <div class="filterGrid">
+          <div class="field"><span class="label">Regelprofil</span><select id="statsProfile"></select></div>
+          <div class="field"><span class="label">Zeitraum</span><select id="statsPeriod"><option value="all">Gesamte Zeit</option><option value="today">Heute</option><option value="7">Letzte 7 Tage</option><option value="30">Letzte 30 Tage</option></select></div>
+          <div class="field"><span class="label">Spieler sortieren</span><select id="statsSort"><option value="games">Runden</option><option value="wins">Partiesiege</option><option value="rate">Partie-Siegquote</option><option value="points">Gewonnene Punkte</option></select></div>
+          <div class="field"><span class="label">Daten</span><select id="statsScope"><option value="all">Alle Spiele</option><option value="current">Nur aktuelles Spiel</option></select></div>
+        </div>
+      </div>
 
-<section id="page-history" class="hidden">
-  <div class="card">
-    <h2>Verlauf – Filter</h2>
-    <div class="filterGrid">
-      <div class="field"><span class="label">Regelprofil</span><select id="historyProfile"></select></div>
-      <div class="field"><span class="label">Spieler</span><select id="historyPlayer"></select></div>
-      <div class="field"><span class="label">Ansage</span><select id="historyType"></select></div>
-      <div class="field"><span class="label">Sortierung</span><select id="historySort"><option value="new">Neueste zuerst</option><option value="old">Älteste zuerst</option></select></div>
-      <div class="field"><span class="label">Ansicht</span><select id="historyView"><option value="games">Nach Partien gruppiert</option><option value="rounds">Einzelne Runden</option></select></div>
-    </div>
-    <label class="check" style="margin-top:9px"><input id="historyCurrent" type="checkbox"> Nur aktuelles Spiel</label>
-    <button class="btn secondary" id="clearHistoryFilters" style="margin-top:9px">Filter zurücksetzen</button>
-  </div>
-  <div class="card"><h2>Verlauf</h2><div id="history" class="history"></div></div>
-</section>
+      <div data-stats-pane="overview">
+        <div class="card"><h2>Gesamt</h2>
+          <div class="statsMini fourStats"><div class="miniStat"><span>Runden</span><strong id="totalRounds">0</strong></div><div class="miniStat"><span>Partien</span><strong id="totalSeries">0</strong></div><div class="miniStat"><span>Vorzeitig beendet</span><strong id="totalEnded">0</strong></div><div class="miniStat"><span>Ø Punkte</span><strong id="avgPoints">0</strong></div></div>
+          <div class="stat"><span>Häufigste Ansage</span><strong id="topGame">—</strong></div>
+          <div class="stat"><span>Rundenpunkte gesamt</span><strong id="totalPoints">0</strong></div>
+        </div>
+        <div class="card"><h2>Regelprofile</h2><div id="profileStats"></div></div>
+      </div>
+      <div data-stats-pane="players" class="hidden"><div class="card"><h2>Spieler</h2><div id="playerStats"></div></div></div>
+      <div data-stats-pane="teams" class="hidden"><div class="card"><h2>Teams / Seiten</h2><div id="teamStats"></div></div></div>
+      <div data-stats-pane="types" class="hidden"><div class="card"><h2>Ansagen</h2><div id="typeStats"></div></div></div>
+    </section>
 
-<section id="page-stats" class="hidden">
-  <div class="card">
-    <h2>Statistik – Einstellungen</h2>
-    <div class="filterGrid">
-      <div class="field"><span class="label">Regelprofil</span><select id="statsProfile"></select></div>
-      <div class="field"><span class="label">Zeitraum</span><select id="statsPeriod"><option value="all">Gesamte Zeit</option><option value="today">Heute</option><option value="7">Letzte 7 Tage</option><option value="30">Letzte 30 Tage</option></select></div>
-      <div class="field"><span class="label">Spieler sortieren nach</span><select id="statsSort"><option value="games">Runden</option><option value="wins">Siegen</option><option value="rate">Siegquote</option><option value="points">Gewonnenen Punkten</option></select></div>
-      <div class="field"><span class="label">Daten</span><select id="statsScope"><option value="all">Alle Spiele</option><option value="current">Nur aktuelles Spiel</option></select></div>
-    </div>
-  </div>
-  <div class="card"><h2>Gesamt</h2>
-    <div class="stat"><span>Gespielte Runden</span><strong id="totalRounds">0</strong></div>
-    <div class="stat"><span>Beendete Partien</span><strong id="totalSeries">0</strong></div>
-    <div class="stat"><span>Häufigste Ansage</span><strong id="topGame">—</strong></div>
-    <div class="statsMini"><div class="miniStat"><span>Rundenpunkte gesamt</span><strong id="totalPoints">0</strong></div><div class="miniStat"><span>Ø Punkte / Runde</span><strong id="avgPoints">0</strong></div></div>
-  </div>
-  <div class="card"><h2>Spieler</h2><div id="playerStats"></div></div>
-  <div class="card"><h2>Teams / Seiten</h2><div id="teamStats"></div></div>
-  <div class="card"><h2>Ansagen</h2><div id="typeStats"></div></div>
-  <div class="card"><h2>Regelprofile</h2><div id="profileStats"></div></div>
-</section>
+    <section id="page-more" class="page hidden">
+      <div id="moreTabs" class="subNav card subNavCard"><button data-more="players">👥 Spieler</button><button data-more="rules">⚙️ Regeln</button><button data-more="data">💾 Daten</button></div>
 
-<section id="page-players" class="hidden">
-  <div class="card"><h2>Spieler hinzufügen</h2><div class="row"><input id="newPlayer" maxlength="20" placeholder="Name"><button class="btn" id="addPlayer" style="flex:.65">Hinzufügen</button></div></div>
-  <div class="card"><h2>Spielerliste</h2><div class="sectionHint">Verwendete Spieler werden archiviert statt gelöscht, damit alte Statistiken erhalten bleiben.</div><div id="playerList"></div></div>
-  <div class="card"><h2>Daten & Backup</h2>
-    <div class="backupGrid">
-      <button class="btn secondary" id="exportBackup">⬇️ Backup exportieren</button>
-      <button class="btn secondary" id="importBackup">⬆️ Backup importieren</button>
-      <button class="btn secondary" id="exportCsv">CSV exportieren</button>
-    </div>
-    <input id="backupFile" class="hidden" type="file" accept="application/json,.json">
-    <div class="note" style="margin-top:10px">Backup enthält Spieler, Regelprofile, Verlauf und Statistiken. Es wird nur lokal als Datei exportiert.</div>
-    <button class="btn danger" id="resetAll" style="margin-top:10px">Alle gespeicherten Daten löschen</button>
-  </div>
-</section>
+      <div id="more-players" data-more-pane="players">
+        <div class="card"><h2>Spieler hinzufügen</h2><div class="inputAction"><input id="newPlayer" maxlength="20" placeholder="Name"><button class="btn" id="addPlayer" type="button">Hinzufügen</button></div></div>
+        <div class="card"><h2>Spielerliste</h2><div class="sectionHint">Verwendete Spieler werden archiviert, damit alte Statistiken erhalten bleiben.</div><div id="playerList"></div></div>
+      </div>
 
-<section id="page-rules" class="hidden">
-  <div class="card">
-    <h2>Regelprofile</h2>
-    <div class="rulebar">
-      <div><span class="label">Profil bearbeiten</span><select id="profileSelect"></select></div>
-      <button class="btn secondary" id="duplicateProfile" style="flex:.55">Duplizieren</button>
-    </div>
-    <div class="row" style="margin-top:9px">
-      <button class="btn secondary" id="newProfile">+ Neues Profil</button>
-      <button class="btn danger" id="deleteProfile">Profil löschen</button>
-    </div>
-    <div class="note" style="margin-top:10px">Hier stellst du die Regeln <strong>einmal pro Profil</strong> ein. Beim Spielen erscheinen danach automatisch nur die erlaubten Ansagen und Wertungen.</div>
-  </div>
+      <div id="more-rules" data-more-pane="rules" class="hidden">
+        <div class="rulesHead"><div id="rulesTabs" class="subNav"><button data-rules="profile">Profil</button><button data-rules="general">Grundregeln</button><button data-rules="modifiers">Wertungen</button><button data-rules="announcements">Ansagen</button></div><button id="saveProfile" class="btn good saveRuleBtn" type="button">Speichern</button></div>
 
-  <div class="card">
-    <h2>Grundregeln</h2>
-    <div class="field"><span class="label">Name des Profils</span><input id="rName" maxlength="40"></div>
-    <div class="grid">
-      <div class="field"><span class="label">Spieler insgesamt</span><input id="rPlayers" type="number" min="2" max="4"></div>
-      <div class="field"><span class="label">Spieler auf Seite 1</span><input id="rTeamSize" type="number" min="1" max="3"></div>
-    </div>
-    <div class="grid">
-      <div class="field"><span class="label">Zählweise</span><select id="rScoreMode"><option value="down">Von Ziel herunter</option><option value="up">Von 0 hinauf</option></select></div>
-      <div class="field"><span class="label" id="rLimitLabel">Startpunkte</span><input id="rLimit" type="number" min="1" max="999"></div>
-    </div>
-    <div class="grid">
-      <div class="field"><span class="label">Bommerl bis Partie-Ende</span><input id="rBommerl" type="number" min="0" max="20"></div>
-      <div class="field"><span class="label">Normale Punkte (z.B. 1,2,3)</span><input id="rNormalPoints" placeholder="1,2,3"></div>
-    </div>
-    <div class="small" style="margin-top:7px">Bommerl = 0 bedeutet: Sobald eine Seite das Punkteziel erreicht, ist die Partie sofort beendet.</div>
+        <div data-rules-pane="profile">
+          <div class="card"><h2>Regelprofil</h2>
+            <div class="field"><span class="label">Profil bearbeiten</span><select id="profileSelect"></select></div>
+            <div class="field"><span class="label">Name</span><input id="rName" maxlength="40"></div>
+            <div class="actionGrid"><button class="btn secondary" id="duplicateProfile" type="button">Duplizieren</button><button class="btn secondary" id="newProfile" type="button">+ Neu</button><button class="btn danger" id="deleteProfile" type="button">Löschen</button></div>
+            <div id="activeRuleLock" class="note hidden topGap">Das aktuell laufende Regelprofil ist gesperrt.</div>
+          </div>
+        </div>
 
-    <h3>Erlaubte Wertungen in diesem Regelprofil</h3>
-    <div class="checkrow">
-      <label class="check"><input id="rHalf" type="checkbox"> Halbieren</label>
-      <label class="check"><input id="rFleck" type="checkbox"> Flecken</label>
-      <label class="check"><input id="rDouble" type="checkbox"> Doppelflecken</label>
-    </div>
-    <div class="grid">
-      <div class="field"><span class="label">Fleck-Faktor</span><input id="rFleckFactor" type="number" min="1" max="20" step=".5"></div>
-      <div class="field"><span class="label">Doppelfleck-Faktor</span><input id="rDoubleFactor" type="number" min="1" max="50" step=".5"></div>
-    </div>
-    <div class="field"><span class="label">Rundung beim Halbieren</span><select id="rHalfRound"><option value="ceil">Aufrunden</option><option value="floor">Abrunden</option><option value="exact">Nicht runden</option></select></div>
-  </div>
+        <div data-rules-pane="general" class="hidden">
+          <div class="card"><h2>Grundregeln</h2>
+            <div class="grid"><div class="field"><span class="label">Spieler insgesamt</span><input id="rPlayers" type="number" min="2" max="4"></div><div class="field"><span class="label">Spieler auf Seite 1</span><input id="rTeamSize" type="number" min="1" max="3"></div></div>
+            <div class="grid"><div class="field"><span class="label">Zählweise</span><select id="rScoreMode"><option value="down">Von Ziel herunter</option><option value="up">Von 0 hinauf</option></select></div><div class="field"><span class="label" id="rLimitLabel">Startpunkte</span><input id="rLimit" type="number" min="1" max="999"></div></div>
+            <div class="grid"><div class="field"><span class="label">Bommerl bis Ende</span><input id="rBommerl" type="number" min="0" max="20"></div><div class="field"><span class="label">Normale Punkte</span><input id="rNormalPoints" placeholder="1,2,3"></div></div>
+            <div class="note topGap">Bommerl = 0: Die Partie endet direkt beim Punkteziel.</div>
+          </div>
+        </div>
 
-  <div class="card">
-    <h2>Ansagen / Spiele</h2>
-    <div id="announcementEditor"></div>
-    <button class="btn secondary" id="addAnnouncement">+ Ansage hinzufügen</button>
-    <div class="small" style="margin-top:8px">„Fix“ bedeutet: Für diese Ansage werden Halbieren/Flecken/Doppelflecken beim Spielen ausgeblendet, z.B. für Kontra.</div>
-  </div>
+        <div data-rules-pane="modifiers" class="hidden">
+          <div class="card"><h2>Wertungen / Modifier</h2><div class="sectionHint">Einmal pro Regelprofil definieren. Im Spiel erscheinen nur diese Optionen.</div><div id="modifierEditor"></div><button class="btn secondary topGap" id="addModifier" type="button">+ Wertung hinzufügen</button><div class="note topGap">Beispiel: Halbiert = ×0,5 + aufrunden · Fleck = ×2 · Doppelfleck = ×4.</div></div>
+        </div>
 
-  <div class="card">
-    <button class="btn good" id="saveProfile">Regelprofil speichern</button>
-  </div>
-</section>
+        <div data-rules-pane="announcements" class="hidden">
+          <div class="card"><h2>Ansagen / Spiele</h2><div class="sectionHint">Pro Ansage kannst du festlegen, welche Wertungen erlaubt sind.</div><div id="announcementEditor"></div><button class="btn secondary topGap" id="addAnnouncement" type="button">+ Ansage hinzufügen</button></div>
+        </div>
+      </div>
+
+      <div id="more-data" data-more-pane="data" class="hidden">
+        <div class="card"><h2>Daten & Backup</h2><div class="backupGrid"><button class="btn secondary" id="exportBackup" type="button">⬇️ Backup</button><button class="btn secondary" id="importBackup" type="button">⬆️ Importieren</button><button class="btn secondary" id="exportCsv" type="button">CSV</button></div><input id="backupFile" class="hidden" type="file" accept="application/json,.json"><div class="note topGap">Backup enthält Spieler, Regeln, Verlauf und Statistiken.</div><button class="btn danger topGap" id="resetAll" type="button">Alle Daten löschen</button></div>
+      </div>
+    </section>
+  </main>
 </div>
 
 <div class="nav"><div class="navin">
-<button class="tab active" data-page="game">🎴<br>Spiel</button>
-<button class="tab" data-page="history">🕘<br>Verlauf</button>
-<button class="tab" data-page="stats">📊<br>Statistik</button>
-<button class="tab" data-page="players">👥<br>Spieler</button>
-<button class="tab" data-page="rules">⚙️<br>Regeln</button>
+  <button class="tab active" data-page="game">🎴<br>Runde</button>
+  <button class="tab" data-page="score">🏁<br>Stand</button>
+  <button class="tab" data-page="history">🕘<br>Verlauf</button>
+  <button class="tab" data-page="stats">📊<br>Statistik</button>
+  <button class="tab" data-page="more">☰<br>Mehr</button>
 </div></div>
 
-<script src="app-core.js"></script>
-<script src="app-ui.js"></script>
-<script src="upgrade-ui.js"></script>
-<script src="upgrade-game-history.js"></script>
-<script src="upgrade-players-stats.js"></script>
-<script src="upgrade-rules-backup.js"></script>
-<script src="rules-v6.js"></script>
-<script src="upgrade-bind.js"></script>
-<script>window.initRulesV6?.();</script>
-<script src="dealer-v7.js"></script>
-<script src="layout-v8.js"></script>
-<script src="pwa.js"></script>
+<div id="gameActions" class="sheetOverlay hidden" role="dialog" aria-modal="true" aria-label="Spielaktionen">
+  <div class="sheet"><div class="sheetHead"><div><strong>Spielaktionen</strong><span>Seltene Aktionen</span></div><button id="closeGameMenu" class="iconBtn" type="button">×</button></div>
+    <div class="actionList">
+      <button id="editGameSetup" class="actionBtn" type="button"><span>↩️</span><span><strong>Setup ändern</strong><small>Spieler, Teams oder Geber ändern</small></span></button>
+      <button id="undoRound" class="actionBtn" type="button"><span>↶</span><span><strong>Letzte Runde zurück</strong><small>Letzten Eintrag rückgängig machen</small></span></button>
+      <button id="newSeries" class="actionBtn" type="button"><span>＋</span><span><strong>Neue Partie</strong><small>Mit denselben Spielern neu beginnen</small></span></button>
+      <button id="endGame" class="actionBtn dangerAction" type="button"><span>■</span><span><strong>Spiel beenden</strong><small>Vorzeitig und ohne Sieger beenden</small></span></button>
+    </div>
+  </div>
+</div>
 
+<div id="updateToast" class="updateToast hidden"><div><strong>Neue Version verfügbar</strong><span>App aktualisieren?</span></div><button id="applyUpdate" class="btn good" type="button">Aktualisieren</button></div>
+
+<script src="app.js"></script>
+<script src="pwa.js"></script>
 </body>
 </html>
