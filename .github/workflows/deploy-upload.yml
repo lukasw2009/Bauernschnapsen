@@ -1,0 +1,31 @@
+name: Deploy uploaded app
+
+on:
+  push:
+    paths:
+      - '.deploy/READY'
+
+permissions:
+  contents: write
+
+jobs:
+  deploy:
+    if: github.event.head_commit.message == 'Trigger tough design deployment'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Rebuild uploaded ZIP
+        run: |
+          cat .deploy/chunk-* | tr -d '\n\r' | base64 -d > /tmp/app.zip
+          unzip -o /tmp/app.zip -d .
+          rm -rf .deploy
+      - name: Commit deployed app
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            exit 0
+          fi
+          git commit -m "Deploy tough design upload"
+          git push
