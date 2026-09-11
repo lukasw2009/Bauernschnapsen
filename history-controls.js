@@ -4,6 +4,7 @@
   const $=id=>document.getElementById(id);
   const $$=(sel,root=document)=>[...root.querySelectorAll(sel)];
   const clone=x=>JSON.parse(JSON.stringify(x));
+  const makeId=()=>crypto.randomUUID?crypto.randomUUID():Date.now()+'_'+Math.random().toString(36).slice(2);
   let reloading=false, decorating=false;
 
   function readData(){
@@ -28,6 +29,26 @@
     reloading=true;
     location.reload();
   }
+
+  function repairStoredData(){
+    const d=readData();if(!d)return false;
+    const validSessions=new Set((d.rounds||[]).map(r=>String(r.sessionId||r.id)).filter(Boolean));
+    const dedupe=(rows=[])=>{
+      const seen=new Set();
+      return rows.filter(x=>{
+        const sid=String(x?.sessionId||x?.id||'');
+        if(!sid||!validSessions.has(sid)||seen.has(sid))return false;
+        seen.add(sid);return true;
+      });
+    };
+    const series=dedupe(d.series||[]),ended=dedupe(d.endedSessions||[]);
+    const changed=series.length!==(d.series||[]).length||ended.length!==(d.endedSessions||[]).length;
+    if(!changed)return false;
+    d.series=series;d.endedSessions=ended;
+    saveAndReload(d,d.ui?.page||'stats');
+    return true;
+  }
+
   function removeSessionRecords(d,sessionId){
     const id=String(sessionId);
     d.rounds=(d.rounds||[]).filter(r=>String(r.sessionId||r.id)!==id);
@@ -45,15 +66,9 @@
     const team2=(d.active||[]).filter(id=>!team1.includes(id));
     d.endedSessions=d.endedSessions||[];
     d.endedSessions.unshift({
-      id:(crypto.randomUUID?crypto.randomUUID():Date.now()+'_'+Math.random()),
-      sessionId:d.sessionId,
-      at:new Date().toISOString(),
-      profileId:p?.id||null,
-      profileName:p?.name||'Regelprofil',
-      team1,team2,
-      board:clone(d.board||blankBoard(d)),
-      rounds:rounds.length,
-      reason:'manual'
+      id:makeId(),sessionId:d.sessionId,at:new Date().toISOString(),
+      profileId:p?.id||null,profileName:p?.name||'Regelprofil',
+      team1,team2,board:clone(d.board||blankBoard(d)),rounds:rounds.length,reason:'manual'
     });
   }
 
@@ -77,6 +92,48 @@
     if(!finished)return false;
     d.started=false;
     saveAndReload(d,'history');
+    return true;
+  }
+
+  function applyDoubleBommerl(){
+    const d=readData();if(!d?.started)return false;
+    const p=activeProfile(d);
+    if(!p||p.scoreMode!=='down'||Number(p.bommerl)<=0)return false;
+    const sid=String(d.sessionId||'');
+    const r=(d.rounds||[]).find(x=>String(x.sessionId)===sid);
+    if(!r||r.doubleBommerl||!r.bommerlTo)return false;
+    const winner=Number(r.winner),loser=winner===1?2:winner===2?1:0;
+    if(!loser)return false;
+    const start=Number(p.limit)||0;
+    const loserBefore=Number(r.beforeBoard?.points?.[loser-1]);
+    const winnerReached=Number(r.reachedBoard?.points?.[winner-1]);
+    if(loserBefore!==start||winnerReached>0)return false;
+
+    d.board=d.board||clone(r.afterBoard||blankBoard(d));
+    d.board.bommerl=Array.isArray(d.board.bommerl)?d.board.bommerl:[0,0];
+    d.board.bommerl[loser-1]=(Number(d.board.bommerl[loser-1])||0)+1;
+    r.doubleBommerl=true;
+    r.bommerlCount=2;
+
+    if(d.board.bommerl[loser-1]>=Number(p.bommerl)){
+      d.board.bommerl[loser-1]=Number(p.bommerl);
+      d.board.over=true;
+      r.seriesWinner=winner;
+      const exists=(d.series||[]).some(s=>String(s.sessionId)===sid);
+      if(!exists){
+        d.series=d.series||[];
+        d.series.unshift({
+          id:makeId(),sessionId:d.sessionId,at:r.at||new Date().toISOString(),
+          profileId:p.id,profileName:p.name,
+          team1:[...(r.team1||d.team1||[])],team2:[...(r.team2||(d.active||[]).filter(id=>!(d.team1||[]).includes(id)))],
+          winner,bommerl:[...d.board.bommerl]
+        });
+      }
+    }
+    r.afterBoard=clone(d.board);
+    const page=d.board.over?'history':'game';
+    if(d.board.over)d.started=false;
+    saveAndReload(d,page);
     return true;
   }
 
@@ -121,8 +178,7 @@
       d.rounds=d.rounds.filter(r=>String(r.id)!==String(round.id));
       d.series=(d.series||[]).filter(s=>String(s.sessionId)!==sid);
       d.endedSessions=(d.endedSessions||[]).filter(s=>String(s.sessionId)!==sid);
-      d.board=clone(round.beforeBoard||blankBoard(d));
-      d.board.over=false;
+      d.board=clone(round.beforeBoard||blankBoard(d));d.board.over=false;
       saveAndReload(d,'score');
       return;
     }
@@ -209,12 +265,17 @@
   }
 
   function scheduleDecorate(){setTimeout(decorate,0)}
+  function afterRoundClick(){
+    setTimeout(()=>{
+      if(applyDoubleBommerl())return;
+      if(!closeCompletedGame())scheduleDecorate();
+    },35);
+  }
 
-  ['win1','win2'].forEach(id=>{
-    const b=$(id);if(b)b.addEventListener('click',()=>setTimeout(()=>{if(!closeCompletedGame())scheduleDecorate()},30));
-  });
+  if(repairStoredData())return;
+  ['win1','win2'].forEach(id=>{const b=$(id);if(b)b.addEventListener('click',afterRoundClick)});
   const observer=new MutationObserver(scheduleDecorate);
   observer.observe(document.body,{childList:true,subtree:true,attributes:true,attributeFilter:['disabled']});
-  window.addEventListener('pageshow',()=>{if(!closeCompletedGame())decorate()});
+  window.addEventListener('pageshow',()=>{if(repairStoredData())return;if(!closeCompletedGame())decorate()});
   if(!closeCompletedGame())decorate();
 })();
