@@ -1,4 +1,4 @@
-const CACHE='schnapsen-clean-v11-20260911';
+const CACHE='schnapsen-clean-v12-20260911';
 const ASSETS=['./','./index.html','./style.css','./app.js','./history-controls.js','./pwa.js','./manifest.webmanifest','./icon.svg'];
 self.addEventListener('install',event=>event.waitUntil(caches.open(CACHE).then(c=>c.addAll(ASSETS))));
 self.addEventListener('activate',event=>event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim())));
