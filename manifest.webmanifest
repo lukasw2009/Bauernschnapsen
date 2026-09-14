@@ -1,7 +1,7 @@
 {
   "name": "Schnapsen Tracker",
   "short_name": "Schnapsen",
-  "description": "Punkte, Bommerl, Regelprofile, Verlauf und Statistiken für Schnapsen und Bauernschnapsen.",
+  "description": "Punkte, Bommerl, pausierte Partien, Verlauf und Statistiken für Schnapsen und Bauernschnapsen.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",

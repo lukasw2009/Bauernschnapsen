@@ -30,6 +30,11 @@
           </div>
         </div>
 
+        <div id="pausedGamesCard" class="card pausedCard hidden">
+          <div class="cardTitleRow"><div><h2>Pausierte Partien</h2><div class="sectionHint" id="pausedGamesHint"></div></div></div>
+          <div id="pausedGames" class="pausedList"></div>
+        </div>
+
         <div class="card">
           <h2>Spiel vorbereiten</h2>
           <div class="sectionHint">Spieler wählen und Seite 1 festlegen.</div>
@@ -96,7 +101,7 @@
     </section>
 
     <section id="page-score" class="page hidden">
-      <div id="scoreEmpty" class="card emptyState"><div class="emptyIcon">♠</div><h2>Kein aktives Spiel</h2><div class="small">Starte eine Partie oder sieh dir den Verlauf an.</div><div class="emptyActions"><button id="scoreToGame" class="btn good" type="button">Zum Spiel</button><button id="scoreToHistory" class="btn secondary" type="button">Zum Verlauf</button></div></div>
+      <div id="scoreEmpty" class="card emptyState"><div class="emptyIcon">♠</div><h2>Kein aktives Spiel</h2><div class="small">Starte eine Partie, setze eine pausierte fort oder sieh dir den Verlauf an.</div><div class="emptyActions"><button id="scoreToGame" class="btn good" type="button">Zum Spiel</button><button id="scoreToHistory" class="btn secondary" type="button">Zum Verlauf</button></div></div>
       <div id="scoreActive" class="hidden">
         <div class="card scoreCard">
           <div class="setupSummary"><div><span class="activeBadge" id="activeStatusBadge">AKTIVES SPIEL</span><br><strong id="activeProfileName"></strong></div><button class="iconBtn gameMenuOpen" type="button" aria-label="Spielaktionen">•••</button></div>
@@ -217,6 +222,7 @@
     <div class="actionList">
       <button id="editGameSetup" class="actionBtn" type="button"><span>↩️</span><span><strong>Setup ändern</strong><small>Spieler, Teams oder Geber ändern</small></span></button>
       <button id="undoRound" class="actionBtn" type="button"><span>↶</span><span><strong>Letzte Runde zurück</strong><small>Letzten Eintrag rückgängig machen</small></span></button>
+      <button id="pauseGame" class="actionBtn" type="button"><span>Ⅱ</span><span><strong>Partie pausieren</strong><small>Später fortsetzen oder andere Partie starten</small></span></button>
       <button id="newSeries" class="actionBtn" type="button"><span>＋</span><span><strong>Neue Partie</strong><small>Mit denselben Spielern neu beginnen</small></span></button>
       <button id="endGame" class="actionBtn dangerAction" type="button"><span>■</span><span><strong>Spiel beenden</strong><small>Vorzeitig und ohne Sieger beenden</small></span></button>
     </div>

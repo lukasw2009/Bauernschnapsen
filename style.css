@@ -223,6 +223,51 @@ select:focus,input:focus{
 }
 .emptyActions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:13px}
 .emptyActions .btn{margin:0}
+.pausedCard .sectionHint{margin:0}
+.pausedList{display:flex;flex-direction:column;gap:8px}
+.pausedGame{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto;
+  gap:10px;
+  align-items:center;
+  padding:11px;
+  background:#090909;
+  border:1px solid var(--line);
+  border-radius:6px;
+}
+.pausedGame strong{
+  display:block;
+  color:var(--white);
+  font-size:14px;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+.pausedGame span{
+  display:block;
+  margin-top:3px;
+  color:var(--white);
+  font-size:24px;
+  font-weight:950;
+  line-height:1;
+}
+.pausedGame small{
+  display:block;
+  margin-top:5px;
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.35;
+}
+.pausedActions{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:6px;
+  min-width:112px;
+}
+.pausedActions .btn{
+  padding:8px 10px;
+  font-size:12px;
+}
 .teams{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:9px}
 .teamBox,.scoreTeam,.miniStat,.note,.foldCard{
   background:linear-gradient(180deg,rgba(255,255,255,.07),rgba(255,255,255,.035));
@@ -686,6 +731,8 @@ select:focus,input:focus{
   .dealerBanner small{text-align:left}
   .setupAdd,.emptyActions{grid-template-columns:1fr}
   .setupAdd .btn{width:100%}
+  .pausedGame{grid-template-columns:1fr}
+  .pausedActions{grid-template-columns:1fr 1fr;min-width:0}
 }
 @media(prefers-reduced-motion:reduce){
   *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
