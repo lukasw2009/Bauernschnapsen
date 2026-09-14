@@ -804,3 +804,9 @@ select:focus,input:focus{
 @media(prefers-reduced-motion:reduce){
   *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
 }
+
+/* Dreierschnapsen: drei getrennte Punktestände */
+.scoreboardThree{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:10px}
+.scoreboardThree .scoreTeam{background:rgba(255,255,255,.035);border:1px solid var(--line);border-radius:6px}
+.scoreboardThree .scoreNum{font-size:38px}
+@media (max-width:390px){.scoreboardThree{gap:5px}.scoreboardThree .scoreTeam{padding:9px 3px}.scoreboardThree .scoreNames{font-size:11px}.scoreboardThree .scoreNum{font-size:32px}}
