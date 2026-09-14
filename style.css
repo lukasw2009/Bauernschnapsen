@@ -671,6 +671,71 @@ select:focus,input:focus{
 .actionBtn strong{display:block;font-size:13px}
 .actionBtn small{display:block;color:var(--muted);margin-top:2px;font-size:12px}
 .dangerAction{border-color:rgba(255,79,100,.36);color:#ffd7dc}
+.correctionPanel{
+  padding:10px;
+  background:#080808;
+  border:1px solid var(--line2);
+  border-radius:6px;
+}
+.correctionHead{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  margin-bottom:8px;
+}
+.correctionHead strong,.correctionHead small{display:block}
+.correctionHead small{color:var(--muted);font-size:12px;margin-top:2px}
+.correctionGrid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+}
+.correctionTeam{
+  padding:10px;
+  background:linear-gradient(180deg,#171717,#0d0d0d);
+  border:1px solid var(--line);
+  border-radius:6px;
+}
+.correctionTeam strong{
+  display:block;
+  color:var(--muted);
+  font-size:12px;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+.correctionTeam span{
+  display:block;
+  margin:5px 0 9px;
+  color:var(--white);
+  font-size:27px;
+  font-weight:950;
+  line-height:1;
+}
+.adjustGrid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:5px;
+}
+.adjustGrid .btn,.customCorrection .btn{
+  padding:8px 7px;
+  font-size:12px;
+}
+.customCorrection{
+  display:grid;
+  grid-template-columns:minmax(82px,1fr) repeat(4,auto);
+  gap:6px;
+  margin-top:8px;
+}
+.customCorrection input{
+  padding:8px;
+  font-size:14px;
+}
+.correctionStep{
+  border-color:rgba(201,162,77,.42)!important;
+  background:linear-gradient(180deg,rgba(201,162,77,.12),rgba(10,10,10,.96))!important;
+}
 .updateToast{
   position:fixed;
   left:10px;
@@ -733,6 +798,8 @@ select:focus,input:focus{
   .setupAdd .btn{width:100%}
   .pausedGame{grid-template-columns:1fr}
   .pausedActions{grid-template-columns:1fr 1fr;min-width:0}
+  .correctionGrid,.customCorrection{grid-template-columns:1fr}
+  .customCorrection .btn{width:100%}
 }
 @media(prefers-reduced-motion:reduce){
   *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}

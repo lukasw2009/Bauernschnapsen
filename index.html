@@ -222,6 +222,39 @@
     <div class="actionList">
       <button id="editGameSetup" class="actionBtn" type="button"><span>↩️</span><span><strong>Setup ändern</strong><small>Spieler, Teams oder Geber ändern</small></span></button>
       <button id="undoRound" class="actionBtn" type="button"><span>↶</span><span><strong>Letzte Runde zurück</strong><small>Letzten Eintrag rückgängig machen</small></span></button>
+      <button id="openCorrection" class="actionBtn" type="button"><span>±</span><span><strong>Leiter-Korrektur</strong><small>Punktestand manuell um +2, -2 oder frei ändern</small></span></button>
+      <div id="correctionPanel" class="correctionPanel hidden">
+        <div class="correctionHead"><div><strong>Punkte korrigieren</strong><small>Wird im Verlauf gespeichert.</small></div><button id="closeCorrection" class="iconBtn" type="button" aria-label="Korrektur schließen">×</button></div>
+        <div class="correctionGrid">
+          <div class="correctionTeam">
+            <strong id="correctionName1">Seite 1</strong>
+            <span id="correctionScore1">0</span>
+            <div class="adjustGrid">
+              <button class="btn secondary" data-correct-side="1" data-correct-delta="2" type="button">+2</button>
+              <button class="btn secondary" data-correct-side="1" data-correct-delta="-2" type="button">-2</button>
+              <button class="btn secondary" data-correct-side="1" data-correct-delta="1" type="button">+1</button>
+              <button class="btn secondary" data-correct-side="1" data-correct-delta="-1" type="button">-1</button>
+            </div>
+          </div>
+          <div class="correctionTeam">
+            <strong id="correctionName2">Seite 2</strong>
+            <span id="correctionScore2">0</span>
+            <div class="adjustGrid">
+              <button class="btn secondary" data-correct-side="2" data-correct-delta="2" type="button">+2</button>
+              <button class="btn secondary" data-correct-side="2" data-correct-delta="-2" type="button">-2</button>
+              <button class="btn secondary" data-correct-side="2" data-correct-delta="1" type="button">+1</button>
+              <button class="btn secondary" data-correct-side="2" data-correct-delta="-1" type="button">-1</button>
+            </div>
+          </div>
+        </div>
+        <div class="customCorrection">
+          <input id="correctionAmount" type="number" min="0.5" step="0.5" value="2" aria-label="Eigener Korrekturwert">
+          <button class="btn secondary" data-correct-custom="1" data-correct-dir="1" type="button">S1 +</button>
+          <button class="btn secondary" data-correct-custom="1" data-correct-dir="-1" type="button">S1 -</button>
+          <button class="btn secondary" data-correct-custom="2" data-correct-dir="1" type="button">S2 +</button>
+          <button class="btn secondary" data-correct-custom="2" data-correct-dir="-1" type="button">S2 -</button>
+        </div>
+      </div>
       <button id="pauseGame" class="actionBtn" type="button"><span>Ⅱ</span><span><strong>Partie pausieren</strong><small>Später fortsetzen oder andere Partie starten</small></span></button>
       <button id="newSeries" class="actionBtn" type="button"><span>＋</span><span><strong>Neue Partie</strong><small>Mit denselben Spielern neu beginnen</small></span></button>
       <button id="endGame" class="actionBtn dangerAction" type="button"><span>■</span><span><strong>Spiel beenden</strong><small>Vorzeitig und ohne Sieger beenden</small></span></button>
