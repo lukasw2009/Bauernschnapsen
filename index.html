@@ -3,26 +3,32 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <meta name="theme-color" content="#050505">
+  <meta name="theme-color" content="#123c32">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="Schnapsen">
-  <title>Schnapsen Tracker</title>
+  <meta name="apple-mobile-web-app-title" content="Bauernschnapsen">
+  <meta name="description" content="Dein digitaler Spielzettel für Bauernschnapsen: Punkte, Bommerl, Geber und Statistik. Auch offline.">
+  <title>Bauernschnapsen · Dein Spielzettel</title>
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="redesign.css">
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" href="icon.svg" type="image/svg+xml">
-  <link rel="apple-touch-icon" href="icon.svg">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png" sizes="180x180">
 </head>
 <body>
 <div class="app">
   <header class="appHeader">
-    <div><h1>♠ Schnapsen Tracker</h1><div class="sub" id="subtitle">Punkte · Bommerl · Statistik</div></div>
+    <div class="brand"><span class="brandMark" aria-hidden="true">♠</span><div><span class="brandEyebrow">DEIN DIGITALER SPIELZETTEL</span><h1>Bauernschnapsen<span class="brandDot">.</span></h1><div class="sub" id="subtitle">Punkte · Bommerl · Statistik</div></div></div>
     <span id="offlineBadge" class="offlineBadge hidden">Offline</span>
   </header>
 
   <main>
     <section id="page-game" class="page">
       <div id="gameSetup">
+        <div class="welcomeCard">
+          <div class="welcomeCopy"><div class="eyebrow"><span></span> ZEIT FÜR EINE PARTIE</div><h2>Gute Karten.<br>Klare Punkte.</h2><p>Ihr spielt. Wir zählen mit.</p><div class="welcomeFoot"><span>2–4 Spieler</span><i aria-hidden="true"></i><span>Auch offline</span></div></div>
+          <div class="playingCards" aria-hidden="true"><div class="playingCard cardBack"></div><div class="playingCard cardFront"><span class="cardCorner">A<br>♠</span><span class="cardSpade">♠</span><span class="cardCorner bottom">A<br>♠</span></div></div>
+        </div>
         <div class="card compactCard">
           <div class="rulebar">
             <div><span class="label">Regelprofil</span><select id="quickProfile"></select></div>
@@ -35,9 +41,10 @@
           <div id="pausedGames" class="pausedList"></div>
         </div>
 
-        <div class="card">
-          <h2>Spiel vorbereiten</h2>
+        <div class="card setupCard">
+          <div class="setupHeading"><div><span class="eyebrow">NEUE PARTIE</span><h2>Wer ist dabei?</h2></div><span class="setupCount" id="setupCount" aria-live="polite">0 / 4</span></div>
           <div class="sectionHint" id="setupHint">Spieler wählen und Seite 1 festlegen.</div>
+          <div class="setupStep"><span>01</span><strong>Mitspieler auswählen</strong></div>
           <div class="setupAdd">
             <input id="setupNewPlayer" maxlength="20" placeholder="Spielername" autocomplete="off">
             <button class="btn secondary" id="setupAddPlayer" type="button">Hinzufügen</button>
@@ -46,6 +53,7 @@
           <div id="activeHint" class="small hintLine"></div>
 
           <div class="field" id="teamPickField">
+            <div class="setupStep"><span>02</span><strong>Teams einteilen</strong></div>
             <span class="label" id="teamPickLabel">Spieler für Seite 1</span>
             <div id="teamPicker" class="grid" role="group" aria-labelledby="teamPickLabel"></div>
           </div>
@@ -74,7 +82,7 @@
         </div>
 
         <div class="card roundCard">
-          <div class="cardTitleRow"><div><h2>Runde eintragen</h2><div class="small" id="roundProfileLabel"></div></div></div>
+          <div class="cardTitleRow"><div><span class="eyebrow">PUNKTE FESTHALTEN</span><h2>Runde eintragen</h2><div class="small" id="roundProfileLabel"></div></div><span class="roundMark" aria-hidden="true">♠</span></div>
           <span class="label">Ansage / Spiel</span>
           <div id="announcementButtons" class="choiceGrid"></div>
           <select id="gameType" class="hidden" aria-hidden="true"></select>
@@ -95,7 +103,7 @@
             <div id="threeDeclarerButtons" class="hScroll compactChoices"></div>
           </div>
 
-          <div class="valueBox"><span>Diese Runde zählt</span><strong id="roundValue" aria-live="polite">1</strong></div>
+          <div class="valueBox"><span>Diese Runde zählt<small>Punkte für die Gewinnerseite</small></span><div class="valueNumber"><strong id="roundValue" aria-live="polite">1</strong><small>PUNKTE</small></div></div>
           <div id="roundSummary" class="roundSummary small" aria-live="polite"></div>
           <div class="winnerGrid">
             <button class="btn good" id="win1" type="button">Seite 1 gewinnt</button>
@@ -204,7 +212,7 @@
         </div>
 
         <div data-rules-pane="modifiers" class="hidden">
-          <div class="card"><h2>Wertungen / Modifier</h2><div class="sectionHint">Einmal pro Regelprofil definieren. Im Spiel erscheinen nur diese Optionen.</div><div id="modifierEditor"></div><button class="btn secondary topGap" id="addModifier" type="button">+ Wertung hinzufügen</button><div class="note topGap">Beispiel: Halbiert = ×0,5 + aufrunden · Fleck = ×2 · Doppelfleck = ×4.</div></div>
+          <div class="card"><h2>Wertungen</h2><div class="sectionHint">Einmal pro Regelprofil definieren. Im Spiel erscheinen nur diese Optionen.</div><div id="modifierEditor"></div><button class="btn secondary topGap" id="addModifier" type="button">+ Wertung hinzufügen</button><div class="note topGap">Beispiel: Halbiert = ×0,5 + aufrunden · Fleck = ×2 · Doppelfleck = ×4.</div></div>
         </div>
 
         <div data-rules-pane="announcements" class="hidden">
@@ -219,16 +227,16 @@
   </main>
 </div>
 
-<div class="nav"><div class="navin">
-  <button class="tab active" data-page="game" type="button" aria-label="Runde">♠<br>Runde</button>
-  <button class="tab" data-page="score" type="button" aria-label="Stand">◆<br>Stand</button>
-  <button class="tab" data-page="history" type="button" aria-label="Verlauf">◷<br>Verlauf</button>
-  <button class="tab" data-page="stats" type="button" aria-label="Statistik">▦<br>Statistik</button>
-  <button class="tab" data-page="more" type="button" aria-label="Mehr">☰<br>Mehr</button>
-</div></div>
+<nav class="nav" aria-label="Hauptnavigation"><div class="navin">
+  <button class="tab active" data-page="game" type="button" aria-label="Runde"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="3" width="14" height="18" rx="3"/><path d="m12 8 4 4-4 4-4-4Z"/></svg><span>Runde</span></button>
+  <button class="tab" data-page="score" type="button" aria-label="Stand"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 4h8v6a4 4 0 0 1-8 0ZM8 6H4v2a4 4 0 0 0 4 4m8-6h4v2a4 4 0 0 1-4 4M12 14v6m-4 0h8"/></svg><span>Stand</span></button>
+  <button class="tab" data-page="history" type="button" aria-label="Verlauf"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11a9 9 0 1 1 2.6 7M3 5v6h6m3-4v5l3 2"/></svg><span>Verlauf</span></button>
+  <button class="tab" data-page="stats" type="button" aria-label="Statistik"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V10m8 10V4m8 16v-7"/></svg><span>Statistik</span></button>
+  <button class="tab" data-page="more" type="button" aria-label="Mehr"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/></svg><span>Mehr</span></button>
+</div></nav>
 
 <div id="gameActions" class="sheetOverlay hidden" role="dialog" aria-modal="true" aria-label="Spielaktionen">
-  <div class="sheet"><div class="sheetHead"><div><strong>Spielaktionen</strong><span>Seltene Aktionen</span></div><button id="closeGameMenu" class="iconBtn" type="button" aria-label="Spielaktionen schließen">×</button></div>
+  <div class="sheet"><div class="sheetHead"><div><strong>Spielaktionen</strong><span>Alles rund um deine Partie</span></div><button id="closeGameMenu" class="iconBtn" type="button" aria-label="Spielaktionen schließen">×</button></div>
     <div class="actionList">
       <button id="editGameSetup" class="actionBtn" type="button"><span>↩️</span><span><strong>Setup ändern</strong><small>Spieler, Teams oder Geber ändern</small></span></button>
       <button id="undoRound" class="actionBtn" type="button"><span>↶</span><span><strong>Letzte Runde zurück</strong><small>Letzten Eintrag rückgängig machen</small></span></button>
@@ -287,6 +295,8 @@
 <div id="updateToast" class="updateToast hidden"><div><strong>Neue Version verfügbar</strong><span>App aktualisieren?</span></div><button id="applyUpdate" class="btn good" type="button">Aktualisieren</button></div>
 
 <script src="app.js"></script>
+<script src="redesign.js"></script>
+<script src="accessibility.js"></script>
 <script src="pwa.js"></script>
 </body>
 </html>

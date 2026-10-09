@@ -1,14 +1,19 @@
 {
-  "name": "Schnapsen Tracker",
+  "name": "Bauernschnapsen",
   "short_name": "Schnapsen",
-  "description": "Punkte, Bommerl, pausierte Partien, Verlauf und Statistiken für Schnapsen und Bauernschnapsen.",
+  "description": "Deine Partie im Blick: Punkte, Bommerl, Spieler, Verlauf und Statistiken für Schnapsen und Bauernschnapsen.",
+  "id": "./",
   "start_url": "./",
   "scope": "./",
+  "lang": "de-AT",
   "display": "standalone",
   "orientation": "portrait-primary",
-  "background_color": "#050505",
-  "theme_color": "#050505",
+  "background_color": "#f6f4ed",
+  "theme_color": "#123c32",
   "icons": [
-    {"src":"icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" },
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
   ]
 }

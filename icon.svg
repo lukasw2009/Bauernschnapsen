@@ -1,9 +1,8 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-  <rect width="512" height="512" rx="96" fill="#050505"/>
-  <path d="M76 84h360v344H76z" fill="none" stroke="#f8f8f2" stroke-width="16"/>
-  <path d="M130 120h178v260H130z" fill="#f8f8f2" transform="rotate(-8 219 250)"/>
-  <path d="M204 132h178v260H204z" fill="#111" stroke="#f8f8f2" stroke-width="12" transform="rotate(8 293 262)"/>
-  <text x="255" y="306" text-anchor="middle" font-family="Arial, sans-serif" font-size="154" font-weight="900" fill="#f8f8f2">S</text>
-  <circle cx="138" cy="126" r="13" fill="#c9a24d"/>
-  <circle cx="374" cy="386" r="13" fill="#c9a24d"/>
+  <title>Bauernschnapsen</title>
+  <rect width="512" height="512" fill="#f6f4ed"/>
+  <rect x="70" y="70" width="372" height="372" rx="100" fill="none" stroke="#bb8a39" stroke-width="3"/>
+  <rect x="82" y="82" width="348" height="348" rx="89" fill="none" stroke="#bb8a39" stroke-opacity=".22" stroke-width="2"/>
+  <path d="M256 128c-32 43-113 87-113 147 0 42 33 68 66 62 20-3 34-14 43-30-3 27-12 51-36 68h80c-24-17-33-41-36-68 9 16 23 27 43 30 33 6 66-20 66-62 0-60-81-104-113-147Z" fill="#123c32"/>
+  <path d="m256 394 9 9-9 9-9-9Z" fill="#bb8a39"/>
 </svg>
