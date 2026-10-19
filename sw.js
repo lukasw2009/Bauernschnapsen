@@ -1,8 +1,8 @@
 /* Keep the entire app shell together until the user chooses to update. */
 const CACHE_PREFIX = 'bauernschnapsen-app-';
-const CACHE = `${CACHE_PREFIX}v22-20261009`;
+const CACHE = `${CACHE_PREFIX}v24-20261019`;
 const ASSETS = [
-  './', './index.html', './style.css', './app.js', './pwa.js',
+  './', './index.html', './style.css', './announcement-stats.js', './app.js', './pwa.js',
   './redesign.css', './redesign.js', './accessibility.js', './manifest.webmanifest', './icon.svg',
   './icons/icon-192.png', './icons/icon-512.png',
   './icons/maskable-512.png', './icons/apple-touch-icon.png'

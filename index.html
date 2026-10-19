@@ -95,12 +95,31 @@
           <div id="modifierWrap" class="field">
             <span class="label">Wertung</span>
             <div id="modifierButtons" class="hScroll compactChoices"></div>
+            <div class="small actorHint">Neue Runden starten mit normaler Wertung.</div>
             <div id="fixedNote" class="small hidden hintLine">Nur Grundwertung erlaubt.</div>
           </div>
 
           <div id="threeDeclarerWrap" class="field hidden">
             <span class="label">Ansager</span>
             <div id="threeDeclarerButtons" class="hScroll compactChoices"></div>
+          </div>
+
+          <div class="roundActors">
+            <div id="roundDeclarerWrap" class="field">
+              <label class="label" for="roundDeclarer">Wer sagt an / spielt?</label>
+              <select id="roundDeclarer"><option value="">Nicht angegeben</option></select>
+              <div class="small actorHint">Für die persönliche Ansagen-Statistik auswählen.</div>
+            </div>
+            <div id="roundFleckerWrap" class="field hidden">
+              <label class="label" for="roundFlecker">Wer fleckt?</label>
+              <select id="roundFlecker"><option value="">Nicht angegeben</option></select>
+              <div class="small actorHint">Die Person, die den ersten Fleck ansagt.</div>
+            </div>
+            <div id="roundDoubleFleckerWrap" class="field hidden">
+              <label class="label" for="roundDoubleFlecker">Wer doppelfleckt?</label>
+              <select id="roundDoubleFlecker"><option value="">Nicht angegeben</option></select>
+              <div class="small actorHint">Eine andere Person als beim ersten Fleck.</div>
+            </div>
           </div>
 
           <div class="valueBox"><span>Diese Runde zählt<small>Punkte für die Gewinnerseite</small></span><div class="valueNumber"><strong id="roundValue" aria-live="polite">1</strong><small>PUNKTE</small></div></div>
@@ -176,10 +195,11 @@
           <div class="stat"><span>Rundenpunkte gesamt</span><strong id="totalPoints">0</strong></div>
         </div>
         <div class="card"><h2>Regelprofile</h2><div id="profileStats"></div></div>
+        <div class="card"><div id="announcementOverview"></div></div>
       </div>
-      <div data-stats-pane="players" class="hidden"><div class="card"><h2>Spieler</h2><div id="playerStats"></div></div></div>
+      <div data-stats-pane="players" class="hidden"><div class="card"><h2>Spieler</h2><div id="playerStats"></div></div><div class="card"><div id="personalAnnouncementStats"></div></div></div>
       <div data-stats-pane="teams" class="hidden"><div class="card"><h2>Teams / Seiten</h2><div id="teamStats"></div></div></div>
-      <div data-stats-pane="types" class="hidden"><div class="card"><h2>Ansagen</h2><div id="typeStats"></div></div></div>
+      <div data-stats-pane="types" class="hidden"><div class="card"><h2>Ansagen & Spielanteile</h2><div id="typeStats"></div></div><div class="card"><div id="announcementLeaders"></div></div></div>
     </section>
 
     <section id="page-more" class="page hidden">
@@ -294,6 +314,7 @@
 
 <div id="updateToast" class="updateToast hidden"><div><strong>Neue Version verfügbar</strong><span>App aktualisieren?</span></div><button id="applyUpdate" class="btn good" type="button">Aktualisieren</button></div>
 
+<script src="announcement-stats.js"></script>
 <script src="app.js"></script>
 <script src="redesign.js"></script>
 <script src="accessibility.js"></script>

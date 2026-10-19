@@ -28,6 +28,7 @@
   function labelFields() {
     const names = {
       quickProfile: 'Regelprofil', setupNewPlayer: 'Neuen Spieler für die Partie hinzufügen',
+      roundDeclarer: 'Wer sagt an oder spielt?', roundFlecker: 'Wer fleckt?', roundDoubleFlecker: 'Wer doppelfleckt?',
       newPlayer: 'Name des neuen Spielers', startDealer: 'Erster Geber',
       historyProfile: 'Regelprofil im Verlauf', historyPlayer: 'Spieler im Verlauf',
       historyType: 'Ansage im Verlauf', historySort: 'Verlauf sortieren', historyView: 'Verlauf anzeigen',
