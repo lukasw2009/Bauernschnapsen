@@ -22,6 +22,8 @@
     <span id="offlineBadge" class="offlineBadge hidden">Offline</span>
   </header>
 
+  <div id="roundSaveError" class="roundSaveError hidden" role="alert">Runde nicht gespeichert. Deine Eingabe und der bisherige Spielstand bleiben erhalten. Prüfe den Browserspeicher und versuche es erneut.</div>
+  <div id="lastRoundReceipt" class="roundReceipt hidden" role="status" aria-live="polite"><div><span class="eyebrow">ZULETZT GESPEICHERT</span><strong id="lastRoundReceiptName"></strong><div id="lastRoundReceiptDetail" class="small"></div></div><button id="receiptToHistory" class="btn secondary" type="button">Ansehen</button></div>
   <main>
     <section id="page-game" class="page">
       <div id="gameSetup">
@@ -100,7 +102,7 @@
           </div>
 
           <div id="threeDeclarerWrap" class="field hidden">
-            <span class="label">Ansager</span>
+            <span class="label" id="threeDeclarerLabel">Ansager</span>
             <div id="threeDeclarerButtons" class="hScroll compactChoices"></div>
           </div>
 
@@ -118,7 +120,12 @@
             <div id="roundDoubleFleckerWrap" class="field hidden">
               <label class="label" for="roundDoubleFlecker">Wer doppelfleckt?</label>
               <select id="roundDoubleFlecker"><option value="">Nicht angegeben</option></select>
-              <div class="small actorHint">Eine andere Person als beim ersten Fleck.</div>
+              <div class="small actorHint">Eine andere Person als Ansager und erster Flecker.</div>
+            </div>
+            <div id="roundHalverWrap" class="field hidden">
+              <label class="label" for="roundHalver">Wer halbiert?</label>
+              <select id="roundHalver"><option value="">Bitte auswählen</option></select>
+              <div class="small actorHint">Diese Person wird in der Halbierungsstatistik erfasst.</div>
             </div>
           </div>
 

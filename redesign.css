@@ -116,6 +116,40 @@ button:focus-visible,summary:focus-visible,a:focus-visible{outline:3px solid #a8
 .actorHint{font-size:10px;margin-top:5px;color:#6d7963}
 .roundActorsMeta{font-size:11px;margin-top:8px;padding-top:8px;border-top:1px solid #e3e8d9;color:#526e48;line-height:1.7;overflow-wrap:anywhere}
 .pointActors{font-size:10px;color:#6e795d;white-space:normal;overflow-wrap:anywhere}
+.roundReceipt{display:flex;align-items:flex-start;gap:12px;justify-content:space-between;margin:0 0 18px;padding:14px 16px;border:1px solid #cdddc5;border-radius:13px;background:#edf4e7}
+.roundReceipt>div{min-width:0}
+.roundReceipt strong{display:block;font-size:13px;margin:5px 0;overflow-wrap:anywhere}
+.roundReceipt .small{font-size:10px;line-height:1.75;overflow-wrap:anywhere}
+.roundReceipt .btn{width:auto;min-height:44px;padding:9px 12px;flex-shrink:0;font-size:11px}
+.roundSaveError{padding:14px 16px;border:1px solid #e4b8a8;border-radius:12px;background:#fff0e9;color:#96382f;font-size:12px;line-height:1.7;margin-bottom:16px}
+.playerStatsName{border:0;background:transparent;color:var(--green);font:inherit;font-weight:700;text-decoration:underline;text-decoration-color:#a4b691;text-underline-offset:4px;text-align:left;padding:5px 0;min-height:40px;cursor:pointer;overflow-wrap:anywhere;max-width:100%}
+.announcementLeaderControls{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.announcementLeaderControls .field{min-width:0}
+.announcementLeaderControls select{font-size:16px;min-width:0;width:100%}
+.playerStatsDialog{width:min(740px,calc(100% - 24px));max-width:740px;max-height:calc(100dvh - 28px);padding:0;margin:auto;background:#fffefa;color:var(--green);border:1px solid #d4dec9;border-radius:20px;box-shadow:0 20px 75px #112e2244;overflow-y:auto;overscroll-behavior:contain}
+.playerStatsDialog::backdrop{background:#102c227a;backdrop-filter:blur(3px)}
+.playerStatsDialogHead{position:sticky;top:0;z-index:2;padding:18px 20px;display:flex;align-items:flex-start;justify-content:space-between;gap:14px;background:#fffefaf5;border-bottom:1px solid var(--line);backdrop-filter:blur(10px)}
+.playerStatsDialogHead>div{min-width:0}
+.playerStatsDialogHead h2{font-family:Georgia,serif;font-size:27px;font-weight:400;line-height:1.25;margin:0;overflow-wrap:anywhere}
+.playerStatsDialogHead p,.playerStatsDialogHead .small{font-size:10px;color:#68745e;margin:4px 0 0}
+.playerStatsDialogBody{padding:20px}
+.playerStatsTotals{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin:14px 0 18px}
+.playerStatsMetric{min-width:0;background:#f2f5e9;border:1px solid #e3e9d9;border-radius:11px;padding:12px}
+.playerStatsMetric strong{display:block;font-family:Georgia,serif;font-size:27px;font-weight:400;line-height:1.25;overflow-wrap:anywhere}
+.playerStatsMetric span,.playerStatsMetric small{display:block;font-size:10px;color:#6c795f;line-height:1.6;overflow-wrap:anywhere}
+.playerStatsPointLine{display:flex;gap:10px;flex-wrap:wrap;font-size:12px;line-height:1.7;margin:8px 0;color:#48633e;overflow-wrap:anywhere}
+.playerStatsRoleGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:12px 0 18px}
+.playerStatsRole{border:1px solid #dce5d3;border-radius:11px;padding:13px;background:#f7f9f0;min-width:0}
+.playerStatsRole h3,.playerStatsRole strong{font-size:12px;margin:0 0 6px;overflow-wrap:anywhere}
+.playerStatsRole .small{font-size:10px;line-height:1.7;overflow-wrap:anywhere}
+.playerStatsRole>strong,.playerStatsRole>.small{display:block}
+.playerStatsType{border:1px solid #dce5d3;border-radius:12px;margin:13px 0;overflow:hidden;background:#fcfdf6}
+.playerStatsType summary{padding:14px;cursor:pointer;font-size:14px;font-weight:650;overflow-wrap:anywhere;min-height:48px}
+.playerStatsType summary>span{display:block;font-size:11px;font-weight:400;color:#6c7c62;margin-top:4px;line-height:1.6}
+.playerStatsTypeBody{padding:0 14px 14px}
+.playerStatsTypeBody .playerStatsRoleGrid{margin-bottom:0}
+.playerStatsDialogBody h3{font-family:Georgia,serif;font-size:21px;font-weight:400;margin:22px 0 10px}
+@media(max-width:480px){.announcementLeaderControls{grid-template-columns:1fr}.roundReceipt{flex-direction:column;gap:8px}.roundReceipt .btn{align-self:flex-end}.playerStatsDialogBody{padding:16px}.playerStatsDialogHead{padding:16px}.playerStatsRoleGrid{grid-template-columns:1fr}.playerStatsTotals{grid-template-columns:repeat(2,minmax(0,1fr))}.playerStatsMetric{padding:11px}.playerStatsMetric strong{font-size:25px}}
 .announcementIntro,.announcementCoverage{font-size:11px;line-height:1.7;color:#66735f;overflow-wrap:anywhere}
 .announcementIntro{margin:0 0 15px}
 .announcementCoverage{padding:10px 12px;background:#f3f5eb;border:1px solid #e2e7d8;border-radius:10px;margin:13px 0}
@@ -129,7 +163,7 @@ button:focus-visible,summary:focus-visible,a:focus-visible{outline:3px solid #a8
 .announcementTypeRow .small{font-size:10px}
 .announcementWinRate{font-size:13px;font-weight:650;color:#214e32;margin-top:8px;line-height:1.65;overflow-wrap:anywhere}
 .announcementMetrics>.miniStat:last-child:nth-child(3){grid-column:1/-1}
-@media(min-width:600px){.statsMini.announcementMetrics{grid-template-columns:repeat(3,minmax(0,1fr))}.announcementMetrics>.miniStat:last-child:nth-child(3){grid-column:auto}}
+@media(min-width:600px){.statsMini.announcementMetrics{grid-template-columns:repeat(2,minmax(0,1fr))}.announcementMetrics>.miniStat:last-child:nth-child(3){grid-column:auto}}
 .announcementPlayer{border:1px solid #e1e7d6;border-radius:13px;overflow:hidden;margin-top:12px;background:#fcfcf6}
 .announcementPlayerSummary{list-style:none;display:flex;justify-content:space-between;align-items:flex-start;gap:12px;padding:15px;cursor:pointer;min-height:58px}
 .announcementPlayerSummary::-webkit-details-marker{display:none}

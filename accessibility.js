@@ -28,7 +28,7 @@
   function labelFields() {
     const names = {
       quickProfile: 'Regelprofil', setupNewPlayer: 'Neuen Spieler für die Partie hinzufügen',
-      roundDeclarer: 'Wer sagt an oder spielt?', roundFlecker: 'Wer fleckt?', roundDoubleFlecker: 'Wer doppelfleckt?',
+      roundDeclarer: 'Wer sagt an oder spielt?', roundFlecker: 'Wer fleckt?', roundDoubleFlecker: 'Wer doppelfleckt?', roundHalver: 'Wer halbiert?',
       newPlayer: 'Name des neuen Spielers', startDealer: 'Erster Geber',
       historyProfile: 'Regelprofil im Verlauf', historyPlayer: 'Spieler im Verlauf',
       historyType: 'Ansage im Verlauf', historySort: 'Verlauf sortieren', historyView: 'Verlauf anzeigen',
@@ -89,7 +89,7 @@
       attribute(button, 'aria-label', name + ': ' + (custom ? 'eigenen Korrekturwert ' + (delta > 0 ? 'hinzufügen' : 'abziehen') : (delta > 0 ? '+' : '') + delta + ' Punkte korrigieren'));
     });
     document.querySelectorAll('.playerManage').forEach(row => {
-      const name = row.querySelector('.playerIdentity strong')?.textContent.trim() || 'Spieler';
+      const name = row.querySelector('.playerIdentity strong, .playerIdentity .playerStatsName')?.textContent.replace(/\s*↗$/, '').trim() || 'Spieler';
       row.querySelectorAll('.playerActions button').forEach(button => {
         attribute(button, 'aria-label', name + ': ' + button.textContent.trim());
       });

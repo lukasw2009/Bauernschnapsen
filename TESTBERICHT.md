@@ -1,36 +1,41 @@
-# Prüfung der überarbeiteten App
+# Prüfbericht · Spielerprofile und vollständige Runden
 
-Geprüft am 19. Oktober 2026 in Chromium unter Windows mit simulierten Handyansichten. Die App wurde außerdem mit einem echten Service Worker offline neu geladen. Die Tests verwenden eigene Testdaten, keine vorhandenen Spielstände des Nutzers.
+Geprüft am 20. Oktober 2026 in Chromium unter Windows mit simulierten Handyansichten. Alle Tests verwenden eigene Daten; auf Spielstände auf dem Handy wurde nicht zugegriffen.
 
 ## Ergebnis
 
-213 Browserprüfungen bestanden: alle 75 bisherigen allgemeinen Funktionsprüfungen, 68 Prüfungen für Ansager und Statistik sowie 70 weitere Prüfungen für getrennte Flecker, normale Folgerunden und echte Siegquoten. Zusätzlich bestanden beide gesonderten Berechnungstests und die echte Offlineprüfung. Während der Prüfungen wurden keine JavaScript-Laufzeitfehler festgestellt.
+169 Browserprüfungen bestanden: 94 neue Prüfungen und 75 bestehende Funktionsprüfungen. Bei den bestehenden Tests ergänzt ein Testhelfer die jetzt erforderlichen Rollen; die Punkteberechnung bleibt geprüft. Hinzu kommen separate Berechnungstests, visuelle Kontrollen und ein echter Offline-Neustart. Keine JavaScript-Laufzeit- oder Konsolenfehler.
 
-- Partien für zwei, drei und vier Spieler; Spielerwahl, Teams, Sitzreihenfolge und erster Geber.
-- Normale Punkte, Halbieren mit Aufrundung, Fleck, Doppelfleck, feste Ansagen, Bommerl und Partieende.
-- Geberwechsel, manuelle und freie Korrekturen, Rückgängig auch nach einer gewonnenen Partie.
-- Pausieren und Fortsetzen einschließlich Auswahlzuständen; gespeicherte Punkte nach erneutem Laden.
-- Eigene Regelprofile, aufsteigende Zählweise und additive Wertungen.
-- Verlauf, Filter, Statistik und Spielerverwaltung.
-- JSON-Backup exportieren und wieder importieren, ungültige Dateien abfangen, CSV exportieren und Zurücksetzen.
-- Hauptansichten ohne horizontales Überlaufen bei 320, 360, 390, 430, 768 und 1200 Pixel Breite; neue Statistikansichten zusätzlich bei 320, 390 und 768 Pixeln.
-- Ansager bei zwei und vier Spielern optional erfassen; bestehende Ansagerwahl bei drei Spielern und unveränderte Punkteverteilung.
-- Flecker bei Gefleckt, Doppelfleck und einer benutzerdefinierten Fleck-Wertung; beim Wechsel zur normalen Wertung wird keine veraltete Fleckerwahl übernommen.
-- Fleck und Doppelfleck speichern zwei unterschiedliche Personen. Die erste Person ist in der zweiten Auswahl gesperrt; widersprüchliche Rollen werden auch beim Import bereinigt.
-- Nach Halbiert, Fleck oder Doppelfleck startet die nächste eingetragene Runde mit normaler Wertung und ohne Flecker-Auswahl. Das gilt auch für drei Spieler. Beim Rückgängigmachen werden die ursprüngliche Wertung und beide Rollen wiederhergestellt.
-- Auswahlentwurf einschließlich Ansager und Flecker nach Neuladen sowie nach Pausieren und Fortsetzen. Rückgängig stellt die Auswahl der zurückgenommenen Runde wieder her.
-- Ansager und Flecker im Verlauf, im CSV und nach einem vollständigen JSON-Backup-Import erhalten.
-- Beide Flecker bleiben nach Neuladen, Pause/Fortsetzen, Rücknahme und Backup erhalten. CSV und Verlauf weisen ersten Fleck und Doppelfleck getrennt aus.
-- Kontrollierter Statistikdatensatz: Land-Anteil 40 % insgesamt, 50 % mit Profilfilter und 37,5 % mit Tagesfilter; Punktekorrekturen ausgeschlossen.
-- Tatsächliche Land-Siegquote: ein Sieg des Ansagerteams aus fünf auswertbaren Land-Runden ergibt 20 %. Ein weiterer Filterdatensatz ergibt 25 %. Unbekannte Ansager, fehlende eindeutige Ergebnisse und Punktekorrekturen werden aus dem Siegquoten-Nenner ausgeschlossen.
-- Persönliche Spielanteile und Siegquoten; bei gleicher Land-Anzahl geteilte Führung. Der Rundensieger wird nicht als Ansager geraten.
-- Alte Runden ohne Rollen bleiben unzugeordnet und zählen weiterhin zur Gesamthäufigkeit. Fehlende Zuordnungen werden sichtbar ausgewiesen.
-- Echte Offline-Neuladung mit allen 15 Cache-Adressen einschließlich der neuen Statistikdatei; Testspielerdaten bleiben unverändert. Erstinstallation löst keinen unerwarteten Neustart aus.
+## Nachgestellte und behobene Speicherfehler
 
-Zusätzlich wurden die JavaScript-Syntax aller Projektdateien und die reine Statistikberechnung geprüft: leere Daten, verschiedene Nenner, Normal, Zweier- und Dreierwertung, Gleichstände, fehlende Ergebnisse, sichere Textausgabe und keine Veränderung der übergebenen Runden. Die neuen Ansichten für Rundeneingabe, Spielanteile, Rangliste und persönliche Ansagen wurden visuell kontrolliert.
+- Der alte Doppeltipp-Schutz verwarf auch eine bewusst geänderte zweite Runde innerhalb von 420 ms. Jetzt werden solche Eingaben gespeichert; ein unveränderter versehentlicher Doppeltipp zählt weiterhin nur einmal.
+- Bei fehlgeschlagenem Schreiben wurde zuvor bereits der neue Stand angezeigt. Ein Rundeneintrag wird jetzt erst nach erfolgreichem Schreiben und identischem Rücklesen bestätigt.
+- Ein Schreibfehler oder ein wirkungsloser Schreibaufruf lässt Spielstand, Verlauf und Eingabe unverändert. Die Fehlermeldung ist sichtbar; ein unmittelbarer neuer Versuch ist möglich.
+- Das gilt ausdrücklich auch für die letzte, siegbringende Runde: Bei einem Fehler bleiben laufende Partie und bisheriger Stand erhalten; ein neuer Versuch erzeugt genau eine Runde und ein Resultat.
+- Die zuletzt gespeicherte Runde wird sichtbar mit Spielart, Wertung, Punkten, Sieger und Rollen bestätigt. Siegrunde, Resultat, Neuladen und Rücknahme sind geprüft.
 
-Die Punkteberechnung und die bisherige Speicherkennung bleiben erhalten. Runden werden um optionale Rollen für Ansager, ersten Flecker und Doppelflecker sowie Grundpunkte ergänzt; ein Auswahlentwurf speichert die noch nicht eingetragene Runde. Alle ursprünglichen Projektdateien sind im Paket enthalten.
+## Rollen und Verlauf
 
-Ein physisches Android-Handy oder iPhone wurde nicht getestet. Die Anleitung für Installation und Datenübernahme steht in `README.md`.
+- Normal ohne Sonderwertung hat keinen Ansager. Zu dritt wird nur ein Ergebnisspieler für die unveränderte Punkteverteilung gewählt; er wird nicht als Ansager gewertet.
+- Ansagen und gewertete normale Spiele benötigen eine Spielerzuordnung.
+- Fleck benötigt einen anderen Spieler als den Ansager. Doppelfleck erfasst drei verschiedene Personen: Ansager, erster Flecker, Doppelflecker.
+- Halbiert erfasst Ansager und Halbierer; beide dürfen dieselbe Person sein.
+- Rollen und Auswahlentwürfe bleiben bei Neuladen, Pausieren, Fortsetzen, Rücknahme und Backup erhalten. Verlauf und CSV enthalten auch den Halbierer.
+- Nach dem Eintragen steht die Wertung der nächsten Runde wieder auf Normal. Punktekorrekturen, Bommerl, zwei/drei/vier Spieler und Regelprofile bleiben funktionsfähig.
 
-Der Offlinecache trägt die neue Kennung `v24-20261019` und enthält die Statistikdatei vor der bestehenden App. Der bisherige Ablauf zur bewussten Aktualisierung bleibt bestehen.
+## Profile und Statistiken für alle Spielarten
+
+- Spielernamen in der Statistik und Spielerverwaltung öffnen ein Profil; Schließen, Esc, Fokus-Rückgabe und die mobile Darstellung sind geprüft.
+- Jede Teilnahme erhält das tatsächliche Team-Ergebnis einmal: Pluspunkte bei Sieg, Minuspunkte bei Niederlage, Saldo = Plus minus Minus.
+- Fleck, Doppelfleck und Halbierung sind bereits in der gespeicherten Rundenwertung enthalten. Sie werden statistisch nicht erneut multipliziert. Ein doppelt geflecktes Land zählt mit 36, ein aufgerundetes halbiertes Land mit 5 Punkten, auch wenn der Spielstand an 0 begrenzt wird.
+- Rollenpunkte werden getrennt angezeigt und nicht zusätzlich zu den Teilnahme-Punkten addiert. Geprüft wurde unter anderem +7/−7/Saldo 0 je Teilnehmer ohne doppelte Zählung.
+- Profile zeigen Gesamtwerte, jede Spielart, eigene Ansagen, Flecks, Doppelflecks, Halbierungen, Erfolgsquoten sowie Plus-/Minuspunkte und Saldo.
+- Ranglisten funktionieren pro Spielart und für alle Spielarten gemeinsam: Ansagen, erster Fleck, Doppelfleck, Halbiert, Pluspunkte, Minuspunkte, Saldo. Gleichstände behalten denselben Rang.
+- Siegquoten beziehen sich auf auswertbare Ergebnisse der jeweiligen Rolle. Unbekannte historische Rollen werden nicht geraten. Normales Grundspiel zählt als Teilnahme und zur Häufigkeit, aber nicht als Ansage.
+- Punktekorrekturen sind ausgeschlossen. Zeitraum-, Profil- und Partiefilter gelten auch für Profile und Ranglisten.
+
+## Offline und Darstellung
+
+Alle 15 Ressourcen des Caches v25-20261020 werden offline geladen, einschließlich der Statistikdatei vor der App. Erstinstallation ohne ungefragten Neustart, Testspieler nach Offline-Neuladen erhalten. Eingabe, Verlauf, Statistik und Profile ohne horizontales Überlaufen bei 320, 390 und 768 Pixel Breite geprüft. JavaScript-Syntax aller Projektdateien bestanden.
+
+Ein physisches Android-Handy oder iPhone wurde nicht getestet. Die tatsächliche fehlende Runde auf einem anderen Gerät wurde nicht rekonstruiert. Start, Installation und Übernahme per Backup stehen in README.md.
