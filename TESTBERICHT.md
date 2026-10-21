@@ -1,41 +1,39 @@
-# Prüfbericht · Spielerprofile und vollständige Runden
+# Prüfbericht · Persönliche Punkte und tatsächliche Abzüge
 
-Geprüft am 20. Oktober 2026 in Chromium unter Windows mit simulierten Handyansichten. Alle Tests verwenden eigene Daten; auf Spielstände auf dem Handy wurde nicht zugegriffen.
+Geprüft am 21. Oktober 2026 lokal in Chromium unter Windows mit eigenen Testdaten. Auf Spielstände eines Handys wurde nicht zugegriffen.
 
-## Ergebnis
+## Aktueller Prüfstand
 
-169 Browserprüfungen bestanden: 94 neue Prüfungen und 75 bestehende Funktionsprüfungen. Bei den bestehenden Tests ergänzt ein Testhelfer die jetzt erforderlichen Rollen; die Punkteberechnung bleibt geprüft. Hinzu kommen separate Berechnungstests, visuelle Kontrollen und ein echter Offline-Neustart. Keine JavaScript-Laufzeit- oder Konsolenfehler.
+265 automatisierte Prüfungen sind bestanden: 168 neue fachliche Browserprüfungen, 75 bestehende Funktionsprüfungen und 22 lokale Offline- und Aktualisierungsprüfungen. Die bestehenden Tests ergänzen lediglich die inzwischen erforderlichen Rolleneingaben durch einen Testhelfer. Zusätzliche separate Berechnungstests der neuen persönlichen Punkte sind ebenfalls bestanden. Es traten keine JavaScript-Laufzeit- oder Konsolenfehler auf.
 
-## Nachgestellte und behobene Speicherfehler
+| Prüffeld | Erwartetes Verhalten | Status |
+| --- | --- | --- |
+| Persönliche Rollen | Nur ausdrücklich erfasste Ansager, Flecker, Doppelflecker und Halbierer erhalten persönliche Plus-/Minuspunkte; passive Partner bleiben bei 0. | Bestanden |
+| Normales Grundspiel | Persönliche Punkte bleiben für alle Spieler 0; verändertes Normal mit einer erfassten Rolle wird passend ausgewertet. | Bestanden |
+| Restpunkte zu zweit/viert | Bei 2 Restpunkten zählt ein tatsächlicher Gewinnabzug von 2 als +2 bzw. −2 für die erfasste Rolle; geprüft auch vor Bommerl-Neustart und am Partieende. | Bestanden |
+| Drei Spieler | Gewinnerrollen erhalten den eigenen tatsächlichen Abzug; Verliererrollen den größten einzelnen Gewinnerabzug als Einsatz, keine Summe. | Bestanden |
+| Aufwärtszählende Regeln | Der tatsächliche Punktegewinn bis zur Zielgrenze wird passend ausgewertet. | Bestanden |
+| Mehrere eigene Rollen | Ansager und Halbierer derselben Person erzeugen insgesamt keine doppelten persönlichen Punkte; Halbierung, Rundung und Begrenzung sind geprüft. | Bestanden |
+| Gespeicherte Runden | Zuordnungen und zuverlässige Punktestände werden ausgewertet; ohne rekonstruierbaren Abzug dient der vorhandene Rundenwert als Rückfall. Fehlende Rollen werden nicht geraten. | Bestanden |
+| Profile und Ranglisten | Persönliche Bilanz und Rollenauswertungen verwenden dieselben neuen Regeln; Rollenteilmengen werden nicht zusätzlich addiert. | Bestanden |
+| Verlauf und CSV | Regelwert und effektiver Abzug bleiben getrennt erkennbar, auch für die individuellen Abzüge bei drei Spielern. | Bestanden |
+| Speichern und Eingabeschutz | Schreib-/Rücklesefehler rollen die Eingabe nicht als Erfolg weiter; erneuter Versuch, schnelle geänderte Folgerunden und Doppeltipps sind geprüft. | Bestanden |
+| Offline und Aktualisierung | Alle 15 Ressourcen im Cache v26-20261021, kein ungefragter Neustart, Aktualisierung per Klick und erhaltene Daten nach Offline-Neuladen. | 22 Prüfungen bestanden |
 
-- Der alte Doppeltipp-Schutz verwarf auch eine bewusst geänderte zweite Runde innerhalb von 420 ms. Jetzt werden solche Eingaben gespeichert; ein unveränderter versehentlicher Doppeltipp zählt weiterhin nur einmal.
-- Bei fehlgeschlagenem Schreiben wurde zuvor bereits der neue Stand angezeigt. Ein Rundeneintrag wird jetzt erst nach erfolgreichem Schreiben und identischem Rücklesen bestätigt.
-- Ein Schreibfehler oder ein wirkungsloser Schreibaufruf lässt Spielstand, Verlauf und Eingabe unverändert. Die Fehlermeldung ist sichtbar; ein unmittelbarer neuer Versuch ist möglich.
-- Das gilt ausdrücklich auch für die letzte, siegbringende Runde: Bei einem Fehler bleiben laufende Partie und bisheriger Stand erhalten; ein neuer Versuch erzeugt genau eine Runde und ein Resultat.
-- Die zuletzt gespeicherte Runde wird sichtbar mit Spielart, Wertung, Punkten, Sieger und Rollen bestätigt. Siegrunde, Resultat, Neuladen und Rücknahme sind geprüft.
+## Bestätigte fachliche Fälle
 
-## Rollen und Verlauf
+Bei einem doppelt gefleckten Land mit 2 verbleibenden Punkten bleibt der rechnerische Regelwert getrennt gespeichert; die persönliche Auswertung verwendet nur den tatsächlichen Abzug von 2. Das wurde vor einem Bommerl-Neustart und für die letzte Gewinnrunde geprüft. Zu dritt wurden unterschiedliche tatsächliche Gewinnerabzüge von 2 und 7 nachgestellt: Die jeweilige Gewinnerrolle erhält ihren eigenen Abzug, eine Verliererrolle höchstens 7 als verlorenen Einsatz, keine Summe von 9.
 
-- Normal ohne Sonderwertung hat keinen Ansager. Zu dritt wird nur ein Ergebnisspieler für die unveränderte Punkteverteilung gewählt; er wird nicht als Ansager gewertet.
-- Ansagen und gewertete normale Spiele benötigen eine Spielerzuordnung.
-- Fleck benötigt einen anderen Spieler als den Ansager. Doppelfleck erfasst drei verschiedene Personen: Ansager, erster Flecker, Doppelflecker.
-- Halbiert erfasst Ansager und Halbierer; beide dürfen dieselbe Person sein.
-- Rollen und Auswahlentwürfe bleiben bei Neuladen, Pausieren, Fortsetzen, Rücknahme und Backup erhalten. Verlauf und CSV enthalten auch den Halbierer.
-- Nach dem Eintragen steht die Wertung der nächsten Runde wieder auf Normal. Punktekorrekturen, Bommerl, zwei/drei/vier Spieler und Regelprofile bleiben funktionsfähig.
+Reines Normal und nicht persönlich zugeordnete Partner ergeben keine persönlichen Punkte. Eigene Rollen bei verändertem Normal, Halbierung mit Aufrundung und Begrenzung sowie dieselbe Person als Ansager und Halbierer sind geprüft. Die ursprüngliche Spielertabelle, die Profile, die einzelnen Spielarten und die Ranglisten stimmen überein. Historische Punktestände, unbekannte Rollen, die CSV-Ausgabe und aufwärtszählende Regeln sind abgedeckt.
 
-## Profile und Statistiken für alle Spielarten
+Auch bei Schreibfehlern und nicht bestätigtem Rücklesen bleiben Spielstand, Verlauf und Eingabe erhalten; ein unmittelbarer neuer Versuch speichert genau einmal. Das gilt ebenfalls beim Bommerl-Neustart und am Partieende. Die mobilen Ansichten mit 320, 390 und 768 Pixel Breite zeigen kein horizontales Überlaufen.
 
-- Spielernamen in der Statistik und Spielerverwaltung öffnen ein Profil; Schließen, Esc, Fokus-Rückgabe und die mobile Darstellung sind geprüft.
-- Jede Teilnahme erhält das tatsächliche Team-Ergebnis einmal: Pluspunkte bei Sieg, Minuspunkte bei Niederlage, Saldo = Plus minus Minus.
-- Fleck, Doppelfleck und Halbierung sind bereits in der gespeicherten Rundenwertung enthalten. Sie werden statistisch nicht erneut multipliziert. Ein doppelt geflecktes Land zählt mit 36, ein aufgerundetes halbiertes Land mit 5 Punkten, auch wenn der Spielstand an 0 begrenzt wird.
-- Rollenpunkte werden getrennt angezeigt und nicht zusätzlich zu den Teilnahme-Punkten addiert. Geprüft wurde unter anderem +7/−7/Saldo 0 je Teilnehmer ohne doppelte Zählung.
-- Profile zeigen Gesamtwerte, jede Spielart, eigene Ansagen, Flecks, Doppelflecks, Halbierungen, Erfolgsquoten sowie Plus-/Minuspunkte und Saldo.
-- Ranglisten funktionieren pro Spielart und für alle Spielarten gemeinsam: Ansagen, erster Fleck, Doppelfleck, Halbiert, Pluspunkte, Minuspunkte, Saldo. Gleichstände behalten denselben Rang.
-- Siegquoten beziehen sich auf auswertbare Ergebnisse der jeweiligen Rolle. Unbekannte historische Rollen werden nicht geraten. Normales Grundspiel zählt als Teilnahme und zur Häufigkeit, aber nicht als Ansage.
-- Punktekorrekturen sind ausgeschlossen. Zeitraum-, Profil- und Partiefilter gelten auch für Profile und Ranglisten.
+## Bestätigte Offline- und Aktualisierungsprüfung
 
-## Offline und Darstellung
+Auf einem lokalen Testserver wurde zunächst die unveränderte Fassung v25 aus dem vorhandenen ZIP geladen. Drei eigene gespeicherte Runden mit Rollen und Punkteständen wurden anschließend über den tatsächlichen Aktualisieren-Knopf auf v26 übernommen. Spieler, Rollen, Originalwerte und Punktestände blieben erhalten; der Klick löste genau einen Neustart aus. Vor dem Klick wurde weiterhin die vollständige alte Fassung verwendet.
 
-Alle 15 Ressourcen des Caches v25-20261020 werden offline geladen, einschließlich der Statistikdatei vor der App. Erstinstallation ohne ungefragten Neustart, Testspieler nach Offline-Neuladen erhalten. Eingabe, Verlauf, Statistik und Profile ohne horizontales Überlaufen bei 320, 390 und 768 Pixel Breite geprüft. JavaScript-Syntax aller Projektdateien bestanden.
+Die übernommenen Testfälle enthalten eine Doppelfleck-Runde mit 2 tatsächlichen Restpunkten, eine halbierte Runde mit 5 tatsächlichen Punkten und derselben Person als Ansager und Halbierer sowie eine normale Runde ohne persönliche Punkte. Die persönlichen Bilanzen lauten dabei +7, +2, −2 und 0; die passive vierte Person erhält keine Punkte. Das geöffnete Spielerprofil zeigt die erwartete persönliche Bilanz +7/0/7. Diese Werte und sämtliche drei Runden bleiben nach einem Offline-Neustart identisch.
 
-Ein physisches Android-Handy oder iPhone wurde nicht getestet. Die tatsächliche fehlende Runde auf einem anderen Gerät wurde nicht rekonstruiert. Start, Installation und Übernahme per Backup stehen in README.md.
+Alle 15 Ressourcen werden vollständig aus dem Cache v26-20261021 geladen, einschließlich des unveränderten finalen Statistikquelltexts. Eine zusätzliche frische Installation bei 320 Pixel Breite verursacht keinen ungefragten Neustart und keinen falschen Aktualisierungshinweis; der angelegte Testspieler bleibt offline erhalten. Über beide Durchläufe traten keine JavaScript-Laufzeitfehler auf.
+
+Ein physisches Android-Handy oder iPhone wurde nicht getestet. Die tatsächlich fehlende Runde auf einem anderen Gerät wurde nicht rekonstruiert. Start, Installation und Übernahme per Backup stehen in README.md.

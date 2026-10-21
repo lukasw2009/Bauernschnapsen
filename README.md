@@ -44,9 +44,15 @@ Die Spielartenanteile eines Spielers beziehen sich auf seine eigenen erfassten A
 
 ## Spielerprofile und Punktebilanz
 
-In der Statistik lässt sich ein Spielername zum persönlichen Profil öffnen. Dort stehen die Auswertungen nach Spielart, Fleck, Doppelfleck, Halbieren und Erfolg sowie Pluspunkte, Minuspunkte und Netto (**Saldo**). Die zugehörigen Ranglisten erlauben den Vergleich zwischen den Spielern.
+In der Statistik lässt sich ein Spielername zum persönlichen Profil öffnen. Dort stehen die Auswertungen nach Spielart, Fleck, Doppelfleck, Halbieren und Erfolg sowie Pluspunkte, Minuspunkte und die **Bilanz** (Pluspunkte minus Minuspunkte; früher Saldo). Die zugehörigen Ranglisten erlauben den Vergleich zwischen den Spielern.
 
-Die Punktebilanz wird getrennt von den erfassten Ansagerrollen berechnet. Für jeden Teilnehmer zählt der bereits berechnete Rundenwert genau einmal positiv auf der Gewinnerseite oder negativ auf der Verliererseite. Netto ist Plus minus Minus. Rollenpunkte im Profil sind Teilmengen dieser Teamwerte und werden nicht zusätzlich zur Bilanz addiert. Bei den mitgelieferten Regeln zählt ein Land mit Doppelfleck deshalb **9 × 4 = 36 Punkte**, ein halbiertes Land aufgerundet **5 Punkte**. Diese Werte werden in der Statistik nicht erneut vervielfacht. Auch wenn der Spielstand am Rundenende bei null stoppt, bleibt der volle berechnete Rundenwert für die Bilanz maßgeblich. Punktekorrekturen sind keine gespielten Runden.
+Persönliche Plus- und Minuspunkte erhält nur, wer in der Runde ausdrücklich als Ansager, Flecker, Doppelflecker oder Halbierer erfasst wurde. Spielpartner ohne eigene Rolle erhalten keine persönlichen Punkte. **Reines Normal zählt persönlich immer 0**, auch wenn sich der Spielstand verändert. Die Bilanz ist Plus minus Minus.
+
+Zu zweit und zu viert zählt der **tatsächliche Punkteabzug der Gewinnerseite**. Hat sie noch 2 Restpunkte, ergeben sich für eine persönlich erfasste Gewinnerrolle **+2** und für eine persönlich erfasste Verliererrolle **−2**. Das gilt auch dann, wenn die Ansage samt Doppelfleck rechnerisch mehr Punkte wert wäre. Die Statistik übernimmt den wirklichen Abzug und vervielfacht ihn nicht erneut.
+
+Zu dritt erhält eine Gewinnerrolle den tatsächlichen Abzug ihres eigenen Punktekontos als Pluspunkte. Für eine Verliererrolle gilt der größte einzelne Abzug der Gewinner als verlorener Einsatz; die Abzüge mehrerer Gewinner werden nicht addiert. Wer in derselben Runde Ansager und Halbierer ist, erhält die persönlichen Punkte insgesamt nur einmal. Einzelne Rollenauswertungen sind Teilmengen der persönlichen Bilanz und werden nicht zusätzlich addiert. Punktekorrekturen zählen nicht als gespielte Runden.
+
+Bei älteren Runden ohne zuverlässig gespeicherte Punktestände lässt sich der tatsächliche Abzug nicht immer rekonstruieren. Dann verwendet die App den vorhandenen Rundenwert; eine nachträgliche Begrenzung auf unbekannte Restpunkte wird nicht erfunden. Fehlende persönliche Rollen werden weiterhin nicht ergänzt.
 
 ## Daten bei einer Aktualisierung behalten
 
